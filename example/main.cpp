@@ -1,8 +1,8 @@
-#include <RCli/utils/utils.hpp>
+#include <RCli/RCli.hpp>
 #include <iostream>
 
 int main(int argc, char const *argv[]){
-    RCli::VectorString values =  RCli::Utils::get_multiple_value({
+    RCli::VectorString values =  RCli::get_multiple_value({
         RCli::OptionValue("Project Name", true, true, "name"),
         RCli::OptionValue("version", true),
         RCli::OptionValue("Author", true, true),
