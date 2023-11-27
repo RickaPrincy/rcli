@@ -17,18 +17,18 @@ String RCli::Utils::get_one_value(String text, bool clean, bool required, String
     String message{text};
     
     if(default_value != "")
-        message + " (default: " + default_value + " )";
+        message = message + " (default: \"" + default_value+ "\" )";
 
     TColor::write(TColor::BLUE, message + " : ");
     TColor::set_color(TColor::YELLOW);
-    String value = Utils::get_line(true);
+    String value = Utils::get_line();
 
     if(clean)
         Common::clean_text(value);
-    if(default_value != "")
+    if(default_value != "" && value.empty())
         value = default_value;
     if(required && value.empty()){
-        TColor::write_endl(TColor::BLUE, text + " is Required");
+        TColor::write_endl(TColor::RED, "[ REQUIRED ]: " + text);
         return Utils::get_one_value(text, clean, required, default_value);
     }
     return value;
