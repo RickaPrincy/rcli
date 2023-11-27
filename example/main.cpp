@@ -2,8 +2,15 @@
 #include <iostream>
 
 int main(int argc, char const *argv[]){
-    RCli::String value =  RCli::Utils::get_one_value("Project Name", true, true);
+    RCli::VectorString values =  RCli::Utils::get_multiple_value({
+        RCli::OptionValue("Project Name", true, true, "name"),
+        RCli::OptionValue("version", true),
+        RCli::OptionValue("Author", true, true),
+        RCli::OptionValue("Description", false, true)
+    });
 
-    std::cout << value << std::endl;
+    for(const auto value: values){
+        std:: cout << value << std::endl;
+    }
     return 0;
 }
