@@ -1,15 +1,15 @@
 #ifndef __RCLI_LIB__
-#define __RCLI_LIB_
+#define __RCLI_LIB__
 
     #include <RCli/types.hpp>
     
     namespace RCli{
         class App{
             private:
-                String name, version, description;
+                RCli::String  name, version, description;
             public:
-                App(String name, String version, String description);
-                void printVersion();
+                App(RCli::String name, RCli::String version, RCli::String description);
+                void print_version();
         };
     }
 #endif

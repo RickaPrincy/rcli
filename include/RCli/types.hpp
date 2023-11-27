@@ -6,6 +6,7 @@
     #include <tuple> 
     #include <map> 
     #include <set> 
+    #include <algorithm>
     
     namespace RCli{
         using String = std::string;
@@ -13,5 +14,5 @@
         using MapString = std::map<String, String>;
         using SetString = std::set<String>;
     } 
- 
+
 #endif
