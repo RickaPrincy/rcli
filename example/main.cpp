@@ -2,15 +2,9 @@
 #include <iostream>
 
 int main(int argc, char const *argv[]){
-    RCli::VectorString values =  RCli::get_multiple_value({
-        RCli::OptionValue("Project Name", true, true, "name"),
-        RCli::OptionValue("version", true),
-        RCli::OptionValue("Author", true, true),
-        RCli::OptionValue("Description", false, true)
-    });
-
-    for(const auto value: values){
-        std:: cout << value << std::endl;
-    }
+    if(RCli::get_boolean("Play chess ? ", false))
+        std::cout << "ok" << std::endl;
+    else
+        std::cout << "tsy ok" << std::endl;
     return 0;
 }
