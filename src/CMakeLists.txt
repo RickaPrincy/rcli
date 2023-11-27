@@ -7,4 +7,4 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_library(RCli STATIC ${SOURCES})
 
 install(TARGETS ${BINARY} DESTINATION lib)
-install(FILES ${HEADERS} DESTINATION include/Templi)
+install(FILES ${HEADERS} DESTINATION include/RCli)

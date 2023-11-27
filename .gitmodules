@@ -1,1 +1,3 @@
-
+[submodule "external/TColor"]
+	path = external/TColor
+	url = https://github.com/RickaPrincy/TColor.hpp.git
