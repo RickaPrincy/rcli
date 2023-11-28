@@ -12,9 +12,10 @@
                 void print_version();
         };
 
-        RCli::String get_one_value(OptionValue option);
-        RCli::VectorString get_multiple_value(std::vector<OptionValue> options);
-        String get_value_list(OptionValue config, VectorString options, bool ignore_case = false);
-        bool get_boolean(String text, bool default_value = true);
+        RCli::String ask_input_value(OptionValue option);
+        RCli::VectorString ask_inputs_values(std::vector<OptionValue> options);
+        String ask_value_in_list(OptionValue config, VectorString options, bool ignore_case = false);
+        bool ask_boolean(String text, bool default_value = true);
+        RCli::String ask_value_in_options(String text, VectorString options);
     }
 #endif
