@@ -8,7 +8,6 @@
             private: 
                 VectorString _options;
                 String _description, _key_name;
-                Callback _callback;
             public:
                 Option(String options,String description, String key_name);
                 

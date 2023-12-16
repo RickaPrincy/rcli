@@ -16,7 +16,6 @@
         using VectorString = std::vector<String>;
         using MapString = std::map<String, String>;
         using SetString = std::set<String>;
-        using Callback = std::function<void()>;
         
         class InputConfig{
             public:

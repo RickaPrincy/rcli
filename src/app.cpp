@@ -5,10 +5,9 @@
 
 using namespace RCli;
 
-App::App(String name, String version, String description): Command(name, description, [](){}){
+App::App(String name, String version, String description): Command(name, description, false){
     std::regex pattern("\\d+\\.\\d+\\.\\d+"); 
     version = Utils::clean_text(version);
-
     if(!name.empty() && !version.empty() && !description.empty()){
         if(!std::regex_match(version, pattern)){
             Utils::quit_error("[ ERROR ]: \"version\" must be \"x.x.x\" (x are number)");
@@ -30,16 +29,16 @@ void RCli::App::print_help(){
 }
 
 void RCli::App::run(int argc,const char *argv[]){
-    if(argc < 2 || argv[1] == "--help" || argv[1] == "-h"){
+    if(argc == 1){
         print_help();
         return;
     }
-    
+
     String arg = argv[1];
-    
     if(arg == "-v" || arg == "--version"){
         TColor::write_endl(TColor::BLUE, _name + "@" + _version);
         return;
     }
+    
     parse(argc, argv, 0);
 }

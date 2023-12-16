@@ -4,6 +4,10 @@
     #include <RCli/Option.hpp>
 
     namespace RCli{
+        class Command;
+        
+        using Callback = std::function<void(Command*)>;
+        
         class Command{
             protected:
                 String _name, _description,  _command_suffix;
@@ -12,6 +16,7 @@
                 std::vector<RCli::Command> _subcommands;
                 MapString _options_values;
                 void parse(int argc,const char *argv[], int start);
+                Command(String name, String description, bool subcommand);
             public:
                 Command(String name, String description, Callback callback);
                 
@@ -31,6 +36,7 @@
                 void add_subcommand(Command new_command);
                 void add_subcommands(std::vector<Command> commands);
                 
+                Command& operator=(const Command& other); 
         };
     }
 

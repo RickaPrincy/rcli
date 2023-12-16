@@ -4,17 +4,36 @@
 
 using namespace RCli;
 
-Command::Command(String name, String description, Callback callback){
+Command& Command::operator=(const Command& other) {
+    if (this != &other) { 
+        _name = other._name;
+        _description = other._description;
+        _command_suffix = other._command_suffix;
+        _options = other._options;
+        _subcommands = other._subcommands;
+        _options_values = other._options_values;
+    }
+    return *this;
+}
+
+Command::Command(String name, String description, bool subcommand){
     _name = name;
     _description = description;
-    _callback = callback;
     _command_suffix = name;
     
-    Option help("-h,--help","Show this help", "help");
-    Option version("-v, --version","Show version", "version");
+    if(!subcommand){
+        Option version("-v, --version","Show version", "version");
+        add_option(version);
+    }
     
+    Option help("-h,--help","Show this help", "help");
     add_option(help);
-    add_option(version);
+}
+
+Command::Command(String name, String description, Callback callback){
+    _callback = callback;
+    Command command(name, description, true);
+    *this = command;
 }
 
 String Command::get_name(){
@@ -31,7 +50,7 @@ bool Command::matched(String text){
 
 bool Command::call_if_matched(String text){
     if(matched(text)){
-        _callback();
+        _callback(this);
         return true;
     }
     return false;
@@ -85,11 +104,10 @@ void RCli::Command::set_suffix(String suffix){
 }
 
 void RCli::Command::add_subcommand(Command new_command){
-    _subcommands.push_back(new_command);
-    
     if(!get_suffix().empty()){
         new_command.set_suffix(get_suffix() + " " + new_command.get_suffix());
     }
+    _subcommands.push_back(new_command);
 }
 
 void RCli::Command::add_subcommands(std::vector<Command> commands){
@@ -109,19 +127,25 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
     if(start + 1 < argc){
         String command_or_option = argv[start + 1];
         
+        if(command_or_option == "--help" || command_or_option == "-h"){
+            print_help();
+            return;
+        }
+
         if(command_or_option.find("-") == 0){
             bool valid_option = false;
             if(start + 2 >= argc){
                 print_help();
                 return;
             }
-
             for(auto option: _options){
                 String key_name = option.get_key_if_matched(command_or_option);
-                if(!key_name.empty()){
-                    continue;;
+                
+                if(key_name.empty()){
+                    continue;
                 }
-                _options_values.insert({key_name, argv[start + 2]});
+                
+                _options_values.insert(std::make_pair(key_name, argv[start + 2]));
                 valid_option = true;
                 break;
             }
@@ -142,5 +166,5 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
         }
     }
 
-    _callback();
+    _callback(this);
 }
