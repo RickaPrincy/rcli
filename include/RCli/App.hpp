@@ -9,7 +9,7 @@
         class App: public RCli::Command{
             public:
                 //Attributes
-                RCli::String  _name, _version, _description;
+                RCli::String _version;
 
                 //Constructors
                 App(RCli::String name, RCli::String version, RCli::String description);

@@ -4,5 +4,6 @@
     #include <RCli/App.hpp>
     #include <RCli/Option.hpp>
     #include <RCli/inputs.hpp>
+    #include <RCli/RCliConfig.hpp>
 
 #endif
