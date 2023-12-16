@@ -18,10 +18,13 @@ RCli::Option::Option(String options,String description, Callback callback){
     _description = description;
     
     if(std::regex_match(options, matches, pattern)){
-        _options.push_back(matches[1]);
-        _options.push_back(matches[2]);
+        String shortValue = matches[1];
+        String longValue = matches[2];
+        _options.push_back("-" + shortValue);
+        _options.push_back("--" + longValue);
     }else if(std::regex_match(options, matches, shortOnly)){
-        _options.push_back(matches[1]);
+        String shortValue = matches[1];
+        _options.push_back("-" + shortValue);
     }else{
         Utils::quit_error("Invalid option. Valid examples include \"-c,--configure\" or \"-c\"");
     }

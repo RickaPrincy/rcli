@@ -5,11 +5,11 @@
 using namespace RCli;
 
 Command::Command(String name, String description, Callback callback){
-    _name = _name;
-    _description = _description;
+    _name = name;
+    _description = description;
     _callback = callback;
-    // Option help("-h,--help","Print help", [&](){ print_help(); });
-    // add_option(help);
+    Option help("-h,--help","Show this help", [&](){ print_help(); });
+    add_option(help);
 }
 
 String Command::get_name(){
@@ -33,12 +33,13 @@ bool Command::call_if_matched(String text){
 }
 
 void Command::print_help(bool is_subcommand){
-    if(!is_subcommand){
+    if(is_subcommand){
         Utils::write_line();
         Utils::write_key_value("Command", _name);
     }
      
     Utils::write_key_value("Description", _description);
+    Utils::write_key_value("\nUsage", _name + " <command> <option>");
     
     if(!_subcommands.empty()){
         TColor::write_endl(TColor::BLUE, "\nCommands:");
@@ -56,7 +57,7 @@ void Command::print_help(bool is_subcommand){
             Utils::write_key_value("\t" + optionValue, option.get_description());
         }
     }
-
+    
     Utils::write_line();
 }
 

@@ -6,13 +6,13 @@
     #include <RCli/inputs.hpp>
     
     namespace RCli{
-        class App: public RCli::Command{
+        class App: public Command{
             public:
                 //Attributes
-                RCli::String _version;
+                String _version;
 
                 //Constructors
-                App(RCli::String name, RCli::String version, RCli::String description);
+                App(String name, String version, String description);
 
                 //Methods
                 void print_help();
