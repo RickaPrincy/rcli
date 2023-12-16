@@ -16,15 +16,15 @@
         using MapString = std::map<String, String>;
         using SetString = std::set<String>;
         
-        class OptionValue{
+        class InputConfig{
             public:
                 RCli::String _text, _default;
                 bool _clean, _required;
                 
-                OptionValue(String text, bool clean = true, bool required = false, String default_value = "")
+                InputConfig(String text, bool clean = true, bool required = false, String default_value = "")
                     : _text(text), _clean(clean), _default(default_value), _required(required) {}
-                OptionValue(const OptionValue& other){ *this = other; }
-                OptionValue& operator=(const OptionValue& other) {
+                InputConfig(const InputConfig& other){ *this = other; }
+                InputConfig& operator=(const InputConfig& other) {
                     if (this != &other) {
                         _text = other._text;
                         _clean = other._clean;
