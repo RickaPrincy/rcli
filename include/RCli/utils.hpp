@@ -13,6 +13,7 @@
             bool compare_ignore_case(RCli::String text, RCli::String text2);
             RCli::String clean_text(RCli::String text, char symbol = ' ');
             void write_line(int number = 100);
+            void write_key_value(String key, String value);
             RCli::String get_line(bool do_endl = false);
             void quit_error(RCli::String message);
         }

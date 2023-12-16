@@ -5,16 +5,17 @@
 
 using namespace RCli;
 
-RCli::Option::Option(String options, Callback callback){
+RCli::Option::Option(String options,String description, Callback callback){
     options = Utils::clean_text(options);
     std::regex pattern(R"(-([a-zA-Z]),--([a-zA-Z]+))");
     std::regex shortOnly(R"(-([a-zA-Z]))"); 
     std::smatch matches;
 
-    if(options.empty() || callback == nullptr || callback == NULL)
+    if(options.empty() || description.empty() || callback == nullptr || callback == NULL)
         Utils::quit_error("Option cannot be empty and callback cannot be null");
     
     _callback = callback;
+    _description = description;
     
     if(std::regex_match(options, matches, pattern)){
         _options.push_back(matches[1]);
@@ -40,4 +41,8 @@ bool Option::matched(String option){
 
 VectorString Option::get_values(){
     return _options;
+}
+
+String Option::get_description(){
+    return _description;
 }

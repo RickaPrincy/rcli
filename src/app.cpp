@@ -23,12 +23,9 @@ App::App(String name, String version, String description): Command(name, descrip
     }
 }
 
-void RCli::App::add_option(Option new_option){
-    _options.push_back(new_option);
-}
-
-void RCli::App::add_options(std::vector<Option> options){
-    for(auto option: options){
-        add_option(option);
-    }
+void RCli::App::print_help(){
+    Utils::write_line();
+    Utils::write_key_value("Name", _name);
+    Utils::write_key_value("Version", _version);
+    Command::print_help(false);
 }

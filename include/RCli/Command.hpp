@@ -11,13 +11,20 @@
                 std::vector<RCli::Option> _options;
                 std::vector<RCli::Command> _subcommands;
                 
-                void print_help();
+            public:
+                Command(String name, String description, Callback callback);
+                
                 bool matched(String text);
                 bool call_if_matched(String text);
-            public:
+                void print_help(bool is_subcommand = true);
+                
                 String get_name();
                 String get_description();
-                Command(String name, String description, Callback callback);
+                
+                void add_option(Option new_option);
+                void add_options(std::vector<Option> options);
+                void add_subcommand(Command new_command);
+                void add_subcommands(std::vector<Command> commands);
         };
     }
 
