@@ -1,2 +1,2 @@
 #! /bin/bash
-touch example/main.cpp; cmake -S . -B example/build; cd example/build; make; ./example "$@"; cd ../..
+cd example; cmake -S . -B build; cd build; make; ./example "$@"; cd ../..

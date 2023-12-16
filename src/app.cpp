@@ -13,7 +13,7 @@ App::App(String name, String version, String description){
 
     if(!name.empty() && !version.empty() && !description.empty()){
         if(!std::regex_match(version, pattern)){
-            Utils::quit_error("[ ERROR ]: \"version\" must be \"x.x.x\"");
+            Utils::quit_error("[ ERROR ]: \"version\" must be \"x.x.x\" (x are number)");
         }
         _name = name;
         _version = version;

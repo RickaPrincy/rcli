@@ -7,6 +7,7 @@
     #include <map> 
     #include <set> 
     #include <algorithm>
+    #include <functional>
     #include <numeric>
     
     namespace RCli{
