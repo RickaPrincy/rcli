@@ -11,9 +11,10 @@
             RCli::String lowercase(RCli::String text);
             bool some(RCli::String text, VectorString values, bool ignore_case = false);
             bool compare_ignore_case(RCli::String text, RCli::String text2);
-            void clean_text(RCli::String &text, char symbol = ' ');
+            RCli::String clean_text(RCli::String text, char symbol = ' ');
             void write_line(int number = 100);
             RCli::String get_line(bool do_endl = false);
+            void quit_error(RCli::String message);
         }
     }
 #endif

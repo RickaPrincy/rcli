@@ -7,4 +7,7 @@ include_directories(${CMAKE_SOURCE_DIR}/external/TColor/include)
 add_library(RCli STATIC ${SOURCES})
 
 install(TARGETS ${BINARY} DESTINATION lib)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/include/RCli DESTINATION include)
+
+install(
+    DIRECTORY ${CMAKE_SOURCE_DIR}/include/RCli DESTINATION include
+)
