@@ -20,25 +20,32 @@ App::App(String name, String version, String description): Command(name, descrip
     }
 }
 
-void RCli::App::print_help(){
-    Utils::write_line();
-    Utils::write_key_value("Name", _name);
-    Utils::write_key_value("Version", _version);
-    
+void App::print_help(){
+    print_version();
     Command::print_help(false);
 }
 
 void RCli::App::run(int argc,const char *argv[]){
     if(argc == 1){
-        print_help();
+        App::print_help();
         return;
     }
 
     String arg = argv[1];
     if(arg == "-v" || arg == "--version"){
-        TColor::write_endl(TColor::BLUE, _name + "@" + _version);
+        print_version();
+        Utils::write_line();
         return;
     }
     
     parse(argc, argv, 0);
+}
+
+void App::print_version(){
+    Utils::write_line();
+    Utils::write_key_value("Name", _name);
+    Utils::write_key_value("Version", _version);
+    for(auto pair: _informations) {
+        Utils::write_key_value(pair.first, pair.second);
+    }
 }

@@ -58,6 +58,11 @@ void Command::print_help(bool is_subcommand){
     }
      
     Utils::write_key_value("Description", _description);
+    
+    for(auto pair: _informations){
+        Utils::write_key_value(pair.first, pair.second);
+    }
+
     Utils::write_key_value("\nUsage", _command_suffix + " <command> <<option> <option_value>>");
     
     if(!_subcommands.empty()){
@@ -162,4 +167,9 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
     }
 
     _callback(this);
+}
+
+void Command::add_informations(MapString informations){
+    for(auto information : informations)
+        _informations.insert(std::make_pair(information.first, information.second));
 }

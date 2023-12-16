@@ -17,6 +17,7 @@
 
                 //Methods
                 void print_help();
+                void print_version();
                 void run(int argc,const char *argv[]);
         };
     }
