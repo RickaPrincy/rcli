@@ -26,11 +26,14 @@ RCli::Option::Option(String options, Callback callback){
     }
 }
 
-
-bool Option::call_if_valid(String option){
-    if(Utils::some(option, _options)){
+bool Option::call_if_matched(String option){
+    if(is_matched(option)){
         _callback();
         return true;
     }
     return false;
+}
+
+bool Option::is_matched(String option){
+    return Utils::some(option, _options);
 }

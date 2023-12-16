@@ -22,3 +22,13 @@ App::App(String name, String version, String description){
         Utils::quit_error("[ ERROR ]: \"name\", \"version\" and \"description\" are required");
     }
 }
+
+void RCli::App::add_option(Option new_option){
+    _options.push_back(new_option);
+}
+
+void RCli::App::add_options(std::vector<Option> options){
+    for(auto option: options){
+        add_option(option);
+    }
+}

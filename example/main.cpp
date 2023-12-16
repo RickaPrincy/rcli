@@ -6,8 +6,6 @@ void sayHello(){
 }
 
 int main(int argc, char const *argv[]){
-    RCli::Option option("-c,  --configure");
-    option.call_if_valid("c");
-    option.call_if_valid("configure");
+    RCli::Option option("-c,  --configure", [](){});
     return 0;
 }

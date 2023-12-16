@@ -16,6 +16,8 @@
 
                 //Methods
                 void print_help();
+                void add_option(Option new_option);
+                void add_options(std::vector<Option> options);
         };
     }
 #endif

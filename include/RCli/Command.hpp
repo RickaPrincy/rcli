@@ -5,9 +5,10 @@
 
     namespace RCli{
         class Command{
-            public:
+            protected:
                 std::vector<RCli::Option> _options;
                 std::vector<RCli::Command> _subcommands;
+            public:
                 Command(){};
         };
     }

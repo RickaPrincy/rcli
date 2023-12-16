@@ -8,11 +8,12 @@
         
         class Option{
             private: 
-                RCli::VectorString _options;
+                VectorString _options;
                 Callback _callback;
             public:
-                Option(RCli::String options, Callback callback);
-                bool call_if_valid(String option);
+                Option(String options, Callback callback);
+                bool call_if_matched(String option);
+                bool is_matched(String option);
         };
     }
 #endif
