@@ -8,8 +8,13 @@ Command::Command(String name, String description, Callback callback){
     _name = name;
     _description = description;
     _callback = callback;
-    Option help("-h,--help","Show this help", [&](){ print_help(); });
+    _command_suffix = name;
+    
+    Option help("-h,--help","Show this help", "help");
+    Option version("-v, --version","Show version", "version");
+    
     add_option(help);
+    add_option(version);
 }
 
 String Command::get_name(){
@@ -39,7 +44,7 @@ void Command::print_help(bool is_subcommand){
     }
      
     Utils::write_key_value("Description", _description);
-    Utils::write_key_value("\nUsage", _name + " <command> <option>");
+    Utils::write_key_value("\nUsage", _command_suffix + " <command> <<option> <option_value>>");
     
     if(!_subcommands.empty()){
         TColor::write_endl(TColor::BLUE, "\nCommands:");
@@ -71,12 +76,71 @@ void RCli::Command::add_options(std::vector<Option> options){
     }
 }
 
+String RCli::Command::get_suffix(){
+    return _command_suffix;
+}
+
+void RCli::Command::set_suffix(String suffix){
+    _command_suffix = suffix;
+}
+
 void RCli::Command::add_subcommand(Command new_command){
     _subcommands.push_back(new_command);
+    
+    if(!get_suffix().empty()){
+        new_command.set_suffix(get_suffix() + " " + new_command.get_suffix());
+    }
 }
 
 void RCli::Command::add_subcommands(std::vector<Command> commands){
     for(auto command: commands){
         add_subcommand(command);
     }
+}
+
+String Command::get_option_value(String key){
+    if(_options_values.find(key) == _options_values.end()){
+        return "";
+    }
+    return _options_values.at(key);
+}
+
+void RCli::Command::parse(int argc,const char *argv[], int start){
+    if(start + 1 < argc){
+        String command_or_option = argv[start + 1];
+        
+        if(command_or_option.find("-") == 0){
+            bool valid_option = false;
+            if(start + 2 >= argc){
+                print_help();
+                return;
+            }
+
+            for(auto option: _options){
+                String key_name = option.get_key_if_matched(command_or_option);
+                if(!key_name.empty()){
+                    continue;;
+                }
+                _options_values.insert({key_name, argv[start + 2]});
+                valid_option = true;
+                break;
+            }
+            
+            if(!valid_option){
+                print_help();
+                return;
+            }
+        }else{
+            for(auto command: _subcommands){
+                if(command.matched(command_or_option)){
+                    command.parse(argc, argv, start + 1);
+                    return;
+                }
+            }
+            print_help();
+            return;
+        }
+    }
+
+    _callback();
 }

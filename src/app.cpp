@@ -28,3 +28,18 @@ void RCli::App::print_help(){
     
     Command::print_help(false);
 }
+
+void RCli::App::run(int argc,const char *argv[]){
+    if(argc < 2 || argv[1] == "--help" || argv[1] == "-h"){
+        print_help();
+        return;
+    }
+    
+    String arg = argv[1];
+    
+    if(arg == "-v" || arg == "--version"){
+        TColor::write_endl(TColor::BLUE, _name + "@" + _version);
+        return;
+    }
+    parse(argc, argv, 0);
+}

@@ -7,13 +7,14 @@
         class Option{
             private: 
                 VectorString _options;
-                String _description;
+                String _description, _key_name;
                 Callback _callback;
             public:
-                Option(String options,String description, Callback callback);
+                Option(String options,String description, String key_name);
+                
                 VectorString get_values();
                 String get_description();
-                bool call_if_matched(String option);
+                String get_key_if_matched(String value);
                 bool matched(String option);
         };
     }

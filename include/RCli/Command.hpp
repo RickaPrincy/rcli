@@ -6,11 +6,12 @@
     namespace RCli{
         class Command{
             protected:
-                String _name, _description;
+                String _name, _description,  _command_suffix;
                 Callback _callback;
                 std::vector<RCli::Option> _options;
                 std::vector<RCli::Command> _subcommands;
-                
+                MapString _options_values;
+                void parse(int argc,const char *argv[], int start);
             public:
                 Command(String name, String description, Callback callback);
                 
@@ -20,11 +21,16 @@
                 
                 String get_name();
                 String get_description();
+                String get_option_value(String key);
                 
+                String get_suffix();
+                void set_suffix(String suffix);
+
                 void add_option(Option new_option);
                 void add_options(std::vector<Option> options);
                 void add_subcommand(Command new_command);
                 void add_subcommands(std::vector<Command> commands);
+                
         };
     }
 
