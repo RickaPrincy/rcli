@@ -4,12 +4,12 @@
 using namespace RCli;
 
 void ask_gender(){
-    String gender = ask_value_in_options("What is your name", {"M", "F"});
+    String gender = ask_value_in_options("What is your gender", {"M", "F"});
     std::cout << "your gender is : " << gender << std::endl; 
 }
 
 int main(int argc, const char *argv[]){
-    App templi("templi", "1.9.5", "Generate cool application");
+    App templi("example", "1.9.5", "Generate cool application");
     InputConfig config = InputConfig()
         .text("What your name")
         .clean(false)
