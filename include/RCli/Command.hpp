@@ -16,9 +16,8 @@
                 std::vector<RCli::Command> _subcommands;
                 MapString _options_values;
                 void parse(int argc,const char *argv[], int start);
-                Command(String name, String description, bool subcommand);
             public:
-                Command(String name, String description, Callback callback);
+                Command(String name, String description, Callback callback, bool subcommand = true);
                 
                 bool matched(String text);
                 bool call_if_matched(String text);

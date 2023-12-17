@@ -5,7 +5,7 @@
 
 using namespace RCli;
 
-App::App(String name, String version, String description): Command(name, description, false){
+App::App(String name, String version, String description): Command(name, description, [](Command*){}, false){
     std::regex pattern("\\d+\\.\\d+\\.\\d+"); 
     version = Utils::clean_text(version);
     if(!name.empty() && !version.empty() && !description.empty()){

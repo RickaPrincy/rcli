@@ -16,24 +16,19 @@ Command& Command::operator=(const Command& other) {
     return *this;
 }
 
-Command::Command(String name, String description, bool subcommand){
+Command::Command(String name, String description, Callback callback, bool subcommand){
     _name = name;
     _description = description;
     _command_suffix = name;
-    
-    if(!subcommand){
+
+    if(!subcommand) {
         Option version("-v, --version","Show version", "version");
         add_option(version);
     }
-    
     Option help("-h,--help","Show this help", "help");
     add_option(help);
-}
-
-Command::Command(String name, String description, Callback callback){
+    
     _callback = callback;
-    Command command(name, description, true);
-    *this = command;
 }
 
 String Command::get_name(){
