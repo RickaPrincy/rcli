@@ -3,9 +3,17 @@
 
 using namespace RCli;
 
+void ask_gender(){
+    String gender = ask_value_in_options("What is your name", {"M", "F"});
+    std::cout << "your gender is : " << gender << std::endl; 
+}
+
 int main(int argc, const char *argv[]){
     App templi("templi", "1.9.5", "Generate cool application");
-    InputConfig config("What is your name", true, true);
+    InputConfig config = InputConfig()
+        .text("What your name")
+        .clean(false)
+        .required(true);
 
     Command init("init", "init new project", [](Command* _init){
         std::cout <<"file value: " <<  _init->get_option_value("file") << std::endl;
@@ -19,11 +27,12 @@ int main(int argc, const char *argv[]){
             name = ask_input_value(config);
         }
 
+        ask_gender();
         std::cout << "Hello  " << name  << std::endl;
     });
     
     hello.add_option(Option("-n,--name", "Specify your name", "name"));
-    
+     
     templi.add_subcommand(init);
     templi.add_subcommand(hello);
     templi.run(argc, argv);

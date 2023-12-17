@@ -18,7 +18,7 @@ String RCli::ask_input_value(InputConfig config){
     if(config._default != "" && value.empty())
         value = config._default;
     if(config._required && value.empty()){
-        TColor::write_endl(TColor::RED, "[ REQUIRED ]: " + config._text);
+        TColor::write_endl(TColor::RED, "[ REQUIRED ]: This is required");
         return RCli::ask_input_value(config);
     }
     return value;
@@ -43,8 +43,12 @@ String RCli::ask_value_in_list(InputConfig config, VectorString options, bool ig
 }
 
 bool RCli::ask_boolean(String text, bool default_value){
-    InputConfig option_value(text, true, true, default_value ? "y" : "n");
-    return Utils::lowercase(RCli::ask_value_in_list(option_value, {"n","y"}, true)) == "y";
+    InputConfig config = InputConfig()
+        .text(text)
+        .default_value(default_value ? "y" : "n")
+        .clean(true)
+        .required(true);
+    return Utils::lowercase(RCli::ask_value_in_list(config, {"n","y"}, true)) == "y";
 }
 
 String RCli::ask_value_in_options(String text, VectorString options){
@@ -55,6 +59,8 @@ String RCli::ask_value_in_options(String text, VectorString options){
         list_options.push_back(std::to_string(i + 1));
     }
 
-    String value = RCli::ask_value_in_list(InputConfig(text, true), list_options);
+    InputConfig config = InputConfig().text(text).clean(true);
+    
+    String value = RCli::ask_value_in_list(config, list_options);
     return options.at(std::stoi(value) - 1);
 }
