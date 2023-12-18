@@ -14,7 +14,7 @@
                 Callback _callback;
                 std::vector<RCli::Option> _options;
                 std::vector<RCli::Command> _subcommands;
-                MapString _options_values;
+                MapString _options_values, _informations;
                 void parse(int argc,const char *argv[], int start);
             public:
                 Command(String name, String description, Callback callback, bool subcommand = true);
@@ -34,7 +34,7 @@
                 void add_options(std::vector<Option> options);
                 void add_subcommand(Command new_command);
                 void add_subcommands(std::vector<Command> commands);
-                
+                void add_informations(MapString informations);
                 Command& operator=(const Command& other); 
         };
     }
