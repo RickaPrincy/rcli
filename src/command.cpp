@@ -58,10 +58,6 @@ void Command::print_help(bool is_subcommand){
     }
      
     Utils::write_key_value("Description", _description);
-    
-    for(auto pair: _informations){
-        Utils::write_key_value(pair.first, pair.second);
-    }
 
     Utils::write_key_value("\nUsage", _command_suffix + " <command> <<option> <option_value>>");
     

@@ -34,7 +34,6 @@ int main(int argc, const char *argv[]){
         std::cout << "Hello  " << name  << std::endl;
     });
     hello.add_option(Option("-n,--name", "Specify your name", "name"));
-     
     templi.add_subcommand(init);
     templi.add_subcommand(hello);
     templi.run(argc, argv);
