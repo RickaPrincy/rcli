@@ -9,21 +9,25 @@ void ask_gender(){
 }
 
 int main(int argc, const char *argv[]){
+    InputConfig config = InputConfig()
+        .text("What your name")
+        .clean(false)
+        .required(true);
+    
     App templi("example", "1.9.5", "Generate cool application");
     templi.add_informations({
         {"Author", "RickaPrincy"},
         {"Github", "https://github.com/RickaPrincy/RCli"}
     });
-    InputConfig config = InputConfig()
-        .text("What your name")
-        .clean(false)
-        .required(true);
-
+    
     Command init("init", "init new project", [](Command* _init){
         std::cout <<"file value: " <<  _init->get_option_value("file") << std::endl;
+        std::cout <<"test value: " <<  _init->get_option_value("test") << std::endl;
     });
 
     init.add_option(Option("-f,--file","Specify file name", "file"));
+    init.add_option(Option("-t,--test","test test", "test"));
+    
     Command hello("hello", "say hello", [&](Command* _hello){
         String name = _hello->get_option_value("name");
         if(name.empty()){
@@ -33,7 +37,9 @@ int main(int argc, const char *argv[]){
         ask_gender();
         std::cout << "Hello  " << name  << std::endl;
     });
+    
     hello.add_option(Option("-n,--name", "Specify your name", "name"));
+    
     templi.add_subcommand(init);
     templi.add_subcommand(hello);
     templi.run(argc, argv);

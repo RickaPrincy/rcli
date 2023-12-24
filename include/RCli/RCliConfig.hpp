@@ -1,3 +1,3 @@
 #define RCli_VERSION_MAJOR 1
-#define RCli_VERSION_MINOR 3
+#define RCli_VERSION_MINOR 4
 #define RCli_VERSION_PATCH 0

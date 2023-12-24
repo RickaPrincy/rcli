@@ -125,14 +125,14 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
         
         if(command_or_option == "--help" || command_or_option == "-h"){
             print_help();
-            return;
+            exit(EXIT_SUCCESS);
         }
 
         if(command_or_option.find("-") == 0){
             bool valid_option = false;
             if(start + 2 >= argc){
                 print_help();
-                return;
+                exit(EXIT_SUCCESS);
             }
             for(auto option: _options){
                 String key_name = option.get_key_if_matched(command_or_option);
@@ -148,17 +148,20 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
             
             if(!valid_option){
                 print_help();
-                return;
+                exit(EXIT_SUCCESS);
+            }else{
+                parse(argc, argv, start + 2);
+                exit(EXIT_SUCCESS);
             }
         }else{
             for(auto command: _subcommands){
                 if(command.matched(command_or_option)){
                     command.parse(argc, argv, start + 1);
-                    return;
+                    exit(EXIT_SUCCESS);
                 }
             }
             print_help();
-            return;
+            exit(EXIT_SUCCESS);
         }
     }
 
