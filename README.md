@@ -4,9 +4,9 @@ RCli is a powerful C++ library that simplifies the creation of CLI applications.
 
 With RCli, you can effortlessly handle user interactions, process input, and implement features like help commands (your_cli -h).
 
-# BUILD :hammer:
+For the color, RCli use [TColor](http://github.com/RickaPrincy/TColor)
 
-#### I recommend using RCli as a CMake submodule. However, if you prefer to build it separately, here's how you can do it:
+# BUILD :hammer:
 
 - Dependancies
     - CMake (Version 3.27 or later)
@@ -31,6 +31,7 @@ Create an instance of the App class, specifying the application name, version, a
 
 ```cpp
 int main(int argc, const char *argv[]){
+    Config::_error_color = TColor::B_RED; // RCli use TColor
     App example("example", "1.9.5", "cool application");
     // ...
     // (Your application logic will be added in the following steps)
@@ -58,7 +59,7 @@ Command hello("hello", "Say hello", [&](Command* _hello){
     std::cout << "Hello, " << name << "!" << std::endl;
 });
 
-hello.add_option(Option("-n,--name", "Specify your name", "name"));
+hello.add_option("-n,--name", "Specify your name", "name");
 ```
 
 ### Step 4: Run Your CLI Application
@@ -108,16 +109,33 @@ RCli provides various input types:
 #endif
 ```
 
-# Output 
+# Default color
 
-![Example0](./images/version.png)
+![Example0](./images/default_color.png)
 
-![Example0](./images/option.png)
+# Customized_color
+
+![Example1](./images/customized_color.png)
+
+# Some output
+
+![Example2](./images/version.png)
 
 ![Example1](./images/command.png)
 
 ![Example2](./images/input.png)
 
+# If you wanna install RCli
+
+```bash
+yay -Sy RCli #For system based on archlinux
+```
+or 
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/RCli/main/install.sh)
+```
+ 
 # License 
 
 This project is licensed under the [MIT License](License.txt).
