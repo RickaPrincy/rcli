@@ -10,17 +10,16 @@
     #include <functional>
     #include <initializer_list>
     #include <numeric>
+    #include <dumb_types/dumb_types.hpp>
+    #include <TColor/TColor.hpp>
     
     namespace RCli{
         
-        using String = std::string;
-        using VectorString = std::vector<String>;
-        using MapString = std::map<String, String>;
-        using SetString = std::set<String>;
+        using namespace dumb_types; 
         
         class InputConfig{
             public:
-                RCli::String _text = "", _default = "";
+                String _text = "", _default = "";
                 bool _clean = true, _required = false;
                 InputConfig &text(String text){
                     _text = text;

@@ -2,6 +2,7 @@
 #define __RCLI_UTILS__
 
     #include <RCli/types.hpp>
+    #include <RCli/Config.hpp>
 
     namespace RCli{
         namespace Utils{
@@ -12,9 +13,8 @@
             bool some(RCli::String text, VectorString values, bool ignore_case = false);
             bool compare_ignore_case(RCli::String text, RCli::String text2);
             RCli::String clean_text(RCli::String text, char symbol = ' ');
-            void write_line(int number = 100);
-            void write_key_value(String key, String value);
-            RCli::String get_line(bool do_endl = false);
+            void write_key_value(String key, String value, bool is_info = false);
+            RCli::String get_line(bool do_endl = false, String color = Config::_input_value_color);
             void quit_error(RCli::String message);
         }
     }

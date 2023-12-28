@@ -1,9 +1,18 @@
+#include <regex>
 #include <RCli/RCli.hpp> 
 #include <RCli/utils.hpp> 
 #include <TColor/TColor.hpp> 
-#include <regex>
+#include <RCli/Config.hpp>
 
 using namespace RCli;
+
+//default color
+String 
+    Config::_input_key_color = TColor::WHITE,
+    Config::_input_value_color = TColor::WHITE,
+    Config::_error_color = TColor::WHITE,
+    Config::_info_value_color = TColor::WHITE,
+    Config::_info_key_color = TColor::B_WHITE;
 
 App::App(String name, String version, String description): Command(name, description, [](Command*){}, false){
     std::regex pattern("\\d+\\.\\d+\\.\\d+"); 
@@ -34,7 +43,6 @@ void RCli::App::run(int argc,const char *argv[]){
     String arg = argv[1];
     if(arg == "-v" || arg == "--version"){
         print_version();
-        Utils::write_line();
         return;
     }
     
@@ -42,10 +50,9 @@ void RCli::App::run(int argc,const char *argv[]){
 }
 
 void App::print_version(){
-    Utils::write_line();
-    Utils::write_key_value("Name", _name);
-    Utils::write_key_value("Version", _version);
-    for(auto pair: _informations) {
-        Utils::write_key_value(pair.first, pair.second);
+    Utils::write_key_value("Name", _name, true);
+    Utils::write_key_value("Version", _version, true);
+    for(const auto &[key, value]: _informations) {
+        Utils::write_key_value(key, value, true);
     }
 }

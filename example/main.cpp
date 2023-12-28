@@ -9,6 +9,12 @@ void ask_gender(){
 }
 
 int main(int argc, const char *argv[]){
+    Config::_error_color = TColor::RED;
+    Config::_info_key_color = TColor::B_BLUE;
+    Config::_info_value_color = TColor::BLUE;
+    Config::_input_key_color = TColor::B_GREEN;
+    Config::_input_value_color = TColor::GREEN;
+    
     InputConfig config = InputConfig()
         .text("What your name")
         .clean(false)
@@ -25,8 +31,8 @@ int main(int argc, const char *argv[]){
         std::cout <<"test value: " <<  _init->get_option_value("test") << std::endl;
     });
 
-    init.add_option(Option("-f,--file","Specify file name", "file"));
-    init.add_option(Option("-t,--test","test test", "test"));
+    init.add_option("-f,--file","Specify file name", "file");
+    init.add_option("-t,--test","test test", "test");
     
     Command hello("hello", "say hello", [&](Command* _hello){
         String name = _hello->get_option_value("name");

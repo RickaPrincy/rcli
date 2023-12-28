@@ -1,6 +1,7 @@
 #include <RCli/Command.hpp>
 #include <RCli/utils.hpp>
 #include <TColor/TColor.hpp>
+#include <RCli/Config.hpp>
 
 using namespace RCli;
 
@@ -53,32 +54,33 @@ bool Command::call_if_matched(String text){
 
 void Command::print_help(bool is_subcommand){
     if(is_subcommand){
-        Utils::write_line();
-        Utils::write_key_value("Command", _name);
+        Utils::write_key_value("Command", _name, true);
     }
      
-    Utils::write_key_value("Description", _description);
+    Utils::write_key_value("Description", _description, true);
 
-    Utils::write_key_value("\nUsage", _command_suffix + " <command> <<option> <option_value>>");
+    Utils::write_key_value("\nUsage", _command_suffix + " <command> <<option> <option_value>>", true);
     
     if(!_subcommands.empty()){
-        TColor::write_endl(TColor::BLUE, "\nCommands:");
+        TColor::write_endl(Config::_info_key_color, "\nCommands:");
         
         for(auto command: _subcommands){
-            Utils::write_key_value("\t" + command.get_name(), command.get_description());
+            Utils::write_key_value("\t" + command.get_name(), command.get_description(), true);
         }
     }
     
     if(!_options.empty()){
-        TColor::write_endl(TColor::BLUE, "\nOptions:");
+        TColor::write_endl(Config::_info_key_color, "\nOptions:");
         
         for(auto option: _options){
             String optionValue = Utils::join(option.get_values()," or " );
-            Utils::write_key_value("\t" + optionValue, option.get_description());
+            Utils::write_key_value("\t" + optionValue, option.get_description(), true);
         }
     }
-    
-    Utils::write_line();
+}
+
+void RCli::Command::add_option(String options, String description, String key_name){
+    _options.push_back(Option(options, description, key_name));
 }
 
 void RCli::Command::add_option(Option new_option){

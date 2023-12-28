@@ -31,6 +31,7 @@
                 void set_suffix(String suffix);
 
                 void add_option(Option new_option);
+                void add_option(String options, String description, String key_name);
                 void add_options(std::vector<Option> options);
                 void add_subcommand(Command new_command);
                 void add_subcommands(std::vector<Command> commands);
