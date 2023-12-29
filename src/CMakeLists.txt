@@ -1,17 +1,20 @@
-file(GLOB_RECURSE SOURCES LIST_DIRECTORIES true *.hpp *.h *.cpp)
+# List all source files
+file(GLOB_RECURSE RCLI_SOURCES CONFIGURE_DEPENDS "*.cpp")
 
+# Create the static library
+add_library(RCli STATIC ${RCLI_SOURCES})
 
-add_library(RCli STATIC ${SOURCES})
-
-target_include_directories(RCli PUBLIC ${RCLI_SOURCE_DIR}/include)
-
-set_target_properties(RCli PROPERTIES
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+# Set include directories for the library
+target_include_directories(RCli
+    PUBLIC
+        $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>
 )
 
-if(RCLI_INSTALL)
-    install(TARGETS RCli DESTINATION lib)
-    install(DIRECTORY ${RCLI_SOURCE_DIR}/include/RCli DESTINATION include)
-    install(DIRECTORY ${RCLI_SOURCE_DIR}/include/dumb_types DESTINATION include)
-    install(DIRECTORY ${RCLI_SOURCE_DIR}/include/TColor DESTINATION include)
-endif()
+# Set C++ standard
+target_compile_features(RCli PUBLIC cxx_std_17)
+
+# Set output directory
+set_target_properties(RCli PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+)
