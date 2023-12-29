@@ -69,10 +69,17 @@ install(
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Install all header files into the include/RCli directory with the same directory structure
+# Install RCli header files
 install(
-    DIRECTORY ${RCLI_SOURCE_DIR}/include/
+    DIRECTORY ${RCLI_SOURCE_DIR}/include/RCli
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+# Install external header files
+install(
+    DIRECTORY ${RCLI_SOURCE_DIR}/include/external/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING PATTERN "*.hpp"
 )
 
 # Install the Config and ConfigVersion files
