@@ -9,6 +9,7 @@ target_include_directories(RCli
     PUBLIC
         $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}>
         $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include/external>
 )
 
 # Set C++ standard
