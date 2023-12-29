@@ -32,9 +32,9 @@ endif()
 
 add_subdirectory(src)
 
-# if(RCLI_BUILD_EXAMPLES)
-#   add_subdirectory(example)
-# endif()
+if(RCLI_BUILD_EXAMPLES)
+  add_subdirectory(example)
+endif()
 
 # Use GNUIInstallDirs for the installation
 include(GNUInstallDirs)
@@ -79,7 +79,6 @@ install(
 install(
     DIRECTORY ${RCLI_SOURCE_DIR}/include/external/
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-    FILES_MATCHING PATTERN "*.hpp"
 )
 
 # Install the Config and ConfigVersion files

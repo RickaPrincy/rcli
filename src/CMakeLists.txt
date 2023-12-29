@@ -7,7 +7,6 @@ add_library(RCli STATIC ${RCLI_SOURCES})
 # Set include directories for the library
 target_include_directories(RCli
     PUBLIC
-        $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}>
         $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include/external>
 )
