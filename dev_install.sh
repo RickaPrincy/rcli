@@ -1,3 +1,3 @@
 #! /bin/bash
-sudo cmake -DRCLI_INSTALL=ON -S . -B build
-cd build; make install; cd ..
+cmake -DRCLI_INSTALL=ON -S . -B build
+cd build; sudo make install; cd ..
