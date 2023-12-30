@@ -4,9 +4,10 @@
     #include <string>
     #include <functional>
     #include <vector>
+    #include <map>
     #include "rcli/option.hpp"
 
-    namespace RCli{
+    namespace rcli{
         class Command;
         
         using Callback = std::function<void(Command*)>;
@@ -15,9 +16,9 @@
             protected:
                 std::string _name, _description,  _command_suffix;
                 Callback _callback;
-                std::vector<RCli::Option> _options;
-                std::vector<RCli::Command> _subcommands;
-                Mapstd::string _options_values, _informations;
+                std::vector<rcli::Option> _options;
+                std::vector<rcli::Command> _subcommands;
+                std::map<std::string,std::string> _options_values, _informations;
                 void parse(int argc,const char *argv[], int start);
             public:
                 Command(std::string name, std::string description, Callback callback, bool subcommand = true);
@@ -38,7 +39,7 @@
                 void add_options(std::vector<Option> options);
                 void add_subcommand(Command new_command);
                 void add_subcommands(std::vector<Command> commands);
-                void add_informations(Mapstd::string informations);
+                void add_informations(std::map<std::string,std::string> informations);
                 Command& operator=(const Command& other); 
         };
     }

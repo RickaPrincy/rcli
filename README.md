@@ -31,7 +31,7 @@ Create an instance of the App class, specifying the application name, version, a
 
 ```cpp
 int main(int argc, const char *argv[]){
-    Config::_error_color = TColor::B_RED; // rcli use TColor
+    ColorConfig::_error_color = TColor::B_RED; // rcli use TColor
     App example("example", "1.9.5", "cool application");
     // ...
     // (Your application logic will be added in the following steps)
@@ -51,7 +51,7 @@ Command init("init", "Initialize a new project", [](Command* _init){
 init.add_option(Option("-f,--file", "Specify file name", "file"));
 
 Command hello("hello", "Say hello", [&](Command* _hello){
-    String name = _hello->get_option_value("name");
+    std::string name = _hello->get_option_value("name");
     if (name.empty()) {
         // If name is not provided as an option, ask the user for input
         name = ask_input_value("What is your name");
@@ -85,24 +85,26 @@ rcli provides various input types:
 ```cpp
 #ifndef __RCLI_INPUTS__
 #define __RCLI_INPUTS__
-    #include <rcli/types.hpp>
+    
+    #include <vector>
+    #include <string>
 
     namespace rcli {
 
         // one simple value
-        String ask_input_value(InputConfig config);
+        std::string ask_input_value(InputConfig config);
 
         // multiples values
-        VectorString ask_inputs_values(std::vector<InputConfig> configs);
+        std::vector<std::string> ask_inputs_values(std::vector<InputConfig> configs);
 
         // ask the value in list without showing the list
-        String ask_value_in_list(InputConfig config, VectorString options, bool ignore_case = false);
+        std::string ask_value_in_list(InputConfig config, std::vector<std::string> options, bool ignore_case = false);
 
         // ask single one boolean
-        bool ask_boolean(String text, bool default_value = true);
+        bool ask_boolean(std::string text, bool default_value = true);
 
         // ask in value list of options
-        String ask_value_in_options(String text, VectorString options);
+        std::string ask_value_in_options(std::string text, std::vector<std::string> options);
 
     } // namespace rcli
 
