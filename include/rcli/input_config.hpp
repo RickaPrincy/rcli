@@ -1,32 +1,19 @@
-#ifndef __RCLI_TYPES__
-#define __RCLI_TYPES__
+#ifndef __RCLI_INPUT_CONFIG__
+#define __RCLI_INPUT_CONFIG__
 
     #include <string>
-    #include <vector> 
-    #include <tuple> 
-    #include <map> 
-    #include <set> 
-    #include <algorithm>
-    #include <functional>
-    #include <initializer_list>
-    #include <numeric>
-    #include <dumb_types/dumb_types.hpp>
-    #include <TColor/TColor.hpp>
     
-    namespace RCli{
-        
-        using namespace dumb_types; 
-        
+    namespace rcli{
         class InputConfig{
             public:
-                String _text = "", _default = "";
+                std::string _text = "", _default = "";
                 bool _clean = true, _required = false;
-                InputConfig &text(String text){
+                InputConfig &text(std::string text){
                     _text = text;
                     return *this;
                 }
 
-                InputConfig &default_value(String text){
+                InputConfig &default_value(std::string text){
                     _default = text;
                     return *this;
                 }

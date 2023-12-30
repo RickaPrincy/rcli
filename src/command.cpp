@@ -1,9 +1,9 @@
-#include <RCli/Command.hpp>
-#include <RCli/utils.hpp>
-#include <TColor/TColor.hpp>
-#include <RCli/Config.hpp>
+#include "rcli/command.hpp"
+#include "rcli/utils.hpp"
+#include "rcli/color_config.hpp"
+#include "TColor/TColor.hpp"
 
-using namespace RCli;
+using namespace rcli;
 
 Command& Command::operator=(const Command& other) {
     if (this != &other) { 
@@ -17,7 +17,7 @@ Command& Command::operator=(const Command& other) {
     return *this;
 }
 
-Command::Command(String name, String description, Callback callback, bool subcommand){
+Command::Command(std::string name, std::string description, Callback callback, bool subcommand){
     _name = name;
     _description = description;
     _command_suffix = name;
@@ -32,19 +32,19 @@ Command::Command(String name, String description, Callback callback, bool subcom
     _callback = callback;
 }
 
-String Command::get_name(){
+std::string Command::get_name(){
     return _name;
 }
 
-String Command::get_description(){
+std::string Command::get_description(){
     return _description;
 }
 
-bool Command::matched(String text){
+bool Command::matched(std::string text){
     return _name == text;
 }
 
-bool Command::call_if_matched(String text){
+bool Command::call_if_matched(std::string text){
     if(matched(text)){
         _callback(this);
         return true;
@@ -62,7 +62,7 @@ void Command::print_help(bool is_subcommand){
     Utils::write_key_value("\nUsage", _command_suffix + " <command> <<option> <option_value>>", true);
     
     if(!_subcommands.empty()){
-        TColor::write_endl(Config::_info_key_color, "\nCommands:");
+        TColor::write_endl(ColorConfig::_info_key_color, "\nCommands:");
         
         for(auto command: _subcommands){
             Utils::write_key_value("\t" + command.get_name(), command.get_description(), true);
@@ -70,60 +70,60 @@ void Command::print_help(bool is_subcommand){
     }
     
     if(!_options.empty()){
-        TColor::write_endl(Config::_info_key_color, "\nOptions:");
+        TColor::write_endl(ColorConfig::_info_key_color, "\nOptions:");
         
         for(auto option: _options){
-            String optionValue = Utils::join(option.get_values()," or " );
-            Utils::write_key_value("\t" + optionValue, option.get_description(), true);
+            std::string option_value = Utils::join(option.get_values()," or " );
+            Utils::write_key_value("\t" + option_value, option.get_description(), true);
         }
     }
 }
 
-void RCli::Command::add_option(String options, String description, String key_name){
+void rcli::Command::add_option(std::string options, std::string description, std::string key_name){
     _options.push_back(Option(options, description, key_name));
 }
 
-void RCli::Command::add_option(Option new_option){
+void rcli::Command::add_option(Option new_option){
     _options.push_back(new_option);
 }
 
-void RCli::Command::add_options(std::vector<Option> options){
+void rcli::Command::add_options(std::vector<Option> options){
     for(auto option: options){
         add_option(option);
     }
 }
 
-String RCli::Command::get_suffix(){
+std::string rcli::Command::get_suffix(){
     return _command_suffix;
 }
 
-void RCli::Command::set_suffix(String suffix){
+void rcli::Command::set_suffix(std::string suffix){
     _command_suffix = suffix;
 }
 
-void RCli::Command::add_subcommand(Command new_command){
+void rcli::Command::add_subcommand(Command new_command){
     if(!get_suffix().empty()){
         new_command.set_suffix(get_suffix() + " " + new_command.get_suffix());
     }
     _subcommands.push_back(new_command);
 }
 
-void RCli::Command::add_subcommands(std::vector<Command> commands){
+void rcli::Command::add_subcommands(std::vector<Command> commands){
     for(auto command: commands){
         add_subcommand(command);
     }
 }
 
-String Command::get_option_value(String key){
+std::string Command::get_option_value(std::string key){
     if(_options_values.find(key) == _options_values.end()){
         return "";
     }
     return _options_values.at(key);
 }
 
-void RCli::Command::parse(int argc,const char *argv[], int start){
+void rcli::Command::parse(int argc,const char *argv[], int start){
     if(start + 1 < argc){
-        String command_or_option = argv[start + 1];
+        std::string command_or_option = argv[start + 1];
         
         if(command_or_option == "--help" || command_or_option == "-h"){
             print_help();
@@ -137,8 +137,7 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
                 exit(EXIT_SUCCESS);
             }
             for(auto option: _options){
-                String key_name = option.get_key_if_matched(command_or_option);
-                
+                std::string key_name = option.get_key_if_matched(command_or_option);
                 if(key_name.empty()){
                     continue;
                 }
@@ -170,7 +169,7 @@ void RCli::Command::parse(int argc,const char *argv[], int start){
     _callback(this);
 }
 
-void Command::add_informations(MapString informations){
-    for(auto information : informations)
-        _informations.insert(std::make_pair(information.first, information.second));
+void Command::add_informations(std::map<std::string,std::string> informations){
+    for(const auto &[info_key, info_name]: informations)
+        _informations.insert(std::make_pair(info_key, info_name));
 }

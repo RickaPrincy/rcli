@@ -1,18 +1,16 @@
 #ifndef __RCLI_APP__
 #define __RCLI_APP__
     
-    #include <RCli/Command.hpp>
-    #include <RCli/Option.hpp>
-    #include <RCli/inputs.hpp>
-    #include <RCli/Config.hpp>
-    
-    namespace RCli{
+    #include <string>    
+    #include "rcli/command.hpp"
+
+    namespace rcli{
         class App: public Command{
             public:
-                String _version;
+                std::string _version;
                 Callback callback;
                 
-                App(String name, String version, String description);
+                App(std::string name, std::string version, std::string description);
 
                 void print_help();
                 void print_version();

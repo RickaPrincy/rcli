@@ -1,20 +1,20 @@
 #include <regex>
-#include <RCli/RCli.hpp> 
-#include <RCli/utils.hpp> 
-#include <TColor/TColor.hpp> 
-#include <RCli/Config.hpp>
+#include "rcli/app.hpp"
+#include "rcli/utils.hpp"
+#include "rcli/color_config.hpp"
+#include "TColor/TColor.hpp"
 
-using namespace RCli;
+using namespace rcli;
 
 //default color
-String 
-    Config::_input_key_color = TColor::WHITE,
-    Config::_input_value_color = TColor::WHITE,
-    Config::_error_color = TColor::WHITE,
-    Config::_info_value_color = TColor::WHITE,
-    Config::_info_key_color = TColor::B_WHITE;
+std::string 
+    ColorConfig::_input_key_color = TColor::WHITE,
+    ColorConfig::_input_value_color = TColor::WHITE,
+    ColorConfig::_error_color = TColor::WHITE,
+    ColorConfig::_info_value_color = TColor::WHITE,
+    ColorConfig::_info_key_color = TColor::B_WHITE;
 
-App::App(String name, String version, String description): Command(name, description, [](Command*){}, false){
+App::App(std::string name, std::string version, std::string description): Command(name, description, [](Command*){}, false){
     std::regex pattern("\\d+\\.\\d+\\.\\d+"); 
     version = Utils::clean_text(version);
     if(!name.empty() && !version.empty() && !description.empty()){
@@ -34,13 +34,13 @@ void App::print_help(){
     Command::print_help(false);
 }
 
-void RCli::App::run(int argc,const char *argv[]){
+void rcli::App::run(int argc,const char *argv[]){
     if(argc == 1){
         App::print_help();
         return;
     }
 
-    String arg = argv[1];
+    std::string arg = argv[1];
     if(arg == "-v" || arg == "--version"){
         print_version();
         return;
