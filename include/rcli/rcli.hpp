@@ -9,4 +9,7 @@
     #include "rcli/command.hpp"
     #include "rcli/app.hpp"
 
+    //external
+    #include "TColor/TColor.hpp"
+
 #endif //__RCLI_LIB__
