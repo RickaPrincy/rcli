@@ -3,7 +3,7 @@
 
     #include <string>
     
-    namespace RCli{
+    namespace rcli{
         class InputConfig{
             public:
                 std::string _text = "", _default = "";

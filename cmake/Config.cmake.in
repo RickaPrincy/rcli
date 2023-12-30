@@ -8,7 +8,7 @@ else()
 endif()
 
 # Set the library target
-set(RCLI_TARGET "RCli")
+set(RCLI_TARGET "rcli")
 
 # Set the library directory
 set(RCLI_LIBRARY_DIR "${CMAKE_INSTALL_PREFIX}/lib")
@@ -30,4 +30,4 @@ set(RCLI_LIBRARIES ${RCLI_TARGET} PARENT_SCOPE)
 
 # Provide package information
 include(CMakeFindDependencyMacro)
-include("${CMAKE_CURRENT_LIST_DIR}/RCliTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/rcliTargets.cmake")

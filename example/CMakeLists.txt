@@ -6,4 +6,4 @@ target_include_directories(example PUBLIC
 )
 target_link_directories(example PRIVATE ${CMAKE_BINARY_DIR}/lib)
 
-target_link_libraries(example PUBLIC RCli)
+target_link_libraries(example PUBLIC rcli)

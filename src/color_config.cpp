@@ -1,8 +1,8 @@
 #include <iostream>
 #include "TColor/TColor.hpp"
-#include "RCli/ColorConfig.hpp"
+#include "rcli/color_config.hpp"
 
-using namespace RCli;
+using namespace rcli;
 
 //default color
 std::string

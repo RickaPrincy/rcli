@@ -1,10 +1,10 @@
-# RCli :wrench:
+# rcli :wrench:
 
-RCli is a powerful C++ library that simplifies the creation of CLI applications. It provides convenient user `input functions` and efficiently manages command-line `options` and `subcommands`. 
+rcli is a powerful C++ library that simplifies the creation of CLI applications. It provides convenient user `input functions` and efficiently manages command-line `options` and `subcommands`. 
 
-With RCli, you can effortlessly handle user interactions, process input, and implement features like help commands (your_cli -h).
+With rcli, you can effortlessly handle user interactions, process input, and implement features like help commands (your_cli -h).
 
-For the color, RCli use [TColor](http://github.com/RickaPrincy/TColor)
+For the color, rcli use [TColor](http://github.com/RickaPrincy/TColor)
 
 # BUILD :hammer:
 
@@ -12,16 +12,16 @@ For the color, RCli use [TColor](http://github.com/RickaPrincy/TColor)
     - CMake (Version 3.27 or later)
     - C++ Compiler with C++17 support
 
-- Run the configure_and_build.sh script to build RCli.
+- Run the configure_and_build.sh script to build rcli.
 
 # Gettting started
 
-### Step 1: Include RCli in your Project
+### Step 1: Include rcli in your Project
 
-Include the RCli library in your project by adding the following include statements at the beginning of your source file:
+Include the rcli library in your project by adding the following include statements at the beginning of your source file:
 
 ```cpp
-#include <RCli/RCli.hpp>
+#include <rcli/rcli.hpp>
 #include <iostream>
 ```
 
@@ -31,7 +31,7 @@ Create an instance of the App class, specifying the application name, version, a
 
 ```cpp
 int main(int argc, const char *argv[]){
-    Config::_error_color = TColor::B_RED; // RCli use TColor
+    Config::_error_color = TColor::B_RED; // rcli use TColor
     App example("example", "1.9.5", "cool application");
     // ...
     // (Your application logic will be added in the following steps)
@@ -76,18 +76,18 @@ templi.run(argc, argv);
 
 ### Automatically Added Options :bulb:
 
-RCli automatically adds help options `(-h and --help)` to all commands, and version options `(-v and --version)` to the main App object. Users can use these options to get information about your application.
+rcli automatically adds help options `(-h and --help)` to all commands, and version options `(-v and --version)` to the main App object. Users can use these options to get information about your application.
 
-### Use Various Input Types in RCli :jack_o_lantern:
+### Use Various Input Types in rcli :jack_o_lantern:
 
-RCli provides various input types:
+rcli provides various input types:
 
 ```cpp
 #ifndef __RCLI_INPUTS__
 #define __RCLI_INPUTS__
-    #include <RCli/types.hpp>
+    #include <rcli/types.hpp>
 
-    namespace RCli {
+    namespace rcli {
 
         // one simple value
         String ask_input_value(InputConfig config);
@@ -104,7 +104,7 @@ RCli provides various input types:
         // ask in value list of options
         String ask_value_in_options(String text, VectorString options);
 
-    } // namespace RCli
+    } // namespace rcli
 
 #endif
 ```
@@ -125,15 +125,15 @@ RCli provides various input types:
 
 ![Example2](./images/input.png)
 
-# If you wanna install RCli
+# If you wanna install rcli
 
 ```bash
-yay -Sy RCli #For system based on archlinux
+yay -Sy rcli #For system based on archlinux
 ```
 or 
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/RCli/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/rcli/main/install.sh)
 ```
  
 # License 

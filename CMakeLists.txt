@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 
-project(RCli VERSION 1.4.2 LANGUAGES CXX)
+project(rcli VERSION 1.4.2 LANGUAGES CXX)
 
 #Set RCLI_SOURCE_DIR to the current path
 set(RCLI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -22,10 +22,10 @@ endif()
 
 # Define Options
 option(RCLI_BUILD_EXAMPLES "Build the examples in the project" OFF)
-option(RCLI_INSTALL "Add install step for RCli" ${RCLI_IS_MAIN_PROJECT})
-option(RCLI_SHARED_LIBS "Build RCli as a shared library" OFF)
+option(RCLI_INSTALL "Add install step for rcli" ${RCLI_IS_MAIN_PROJECT})
+option(RCLI_SHARED_LIBS "Build rcli as a shared library" OFF)
 
-# Build example if build types is not release and RCli is a main project
+# Build example if build types is not release and rcli is a main project
 if (RCLI_IS_MAIN_PROJECT AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(RCLI_BUILD_EXAMPLES ON)
 endif()
@@ -39,39 +39,39 @@ endif()
 # Use GNUIInstallDirs for the installation
 include(GNUInstallDirs)
 
-# Generate RCliConfig.cmake
+# Generate rcliConfig.cmake
 configure_file(
 	"${CMAKE_SOURCE_DIR}/cmake/Config.cmake.in"
-    "${CMAKE_BINARY_DIR}/RCliConfig.cmake" @ONLY
+    "${CMAKE_BINARY_DIR}/rcliConfig.cmake" @ONLY
 )
 
-# Generate RCliConfigVersion.cmake
+# Generate rcliConfigVersion.cmake
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-	"${CMAKE_BINARY_DIR}/RCliConfigVersion.cmake"
+	"${CMAKE_BINARY_DIR}/rcliConfigVersion.cmake"
 	VERSION ${PROJECT_VERSION}
 	COMPATIBILITY AnyNewerVersion
 )
 
-# Install RCliConfig.cmake and RCliConfigVersion.cmake
+# Install rcliConfig.cmake and rcliConfigVersion.cmake
 install(
     FILES
-        "${CMAKE_BINARY_DIR}/RCliConfig.cmake"
-        "${CMAKE_BINARY_DIR}/RCliConfigVersion.cmake"
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/RCli
+        "${CMAKE_BINARY_DIR}/rcliConfig.cmake"
+        "${CMAKE_BINARY_DIR}/rcliConfigVersion.cmake"
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rcli
 )
 
 # Install the library
 install(
-    TARGETS RCli
-    EXPORT RCliTargets
+    TARGETS rcli
+    EXPORT rcliTargets
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Install RCli header files
+# Install rcli header files
 install(
-    DIRECTORY ${RCLI_SOURCE_DIR}/include/RCli
+    DIRECTORY ${RCLI_SOURCE_DIR}/include/rcli
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
@@ -83,7 +83,7 @@ install(
 
 # Install the Config and ConfigVersion files
 install(
-    EXPORT RCliTargets
-    FILE RCliTargets.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/RCli
+    EXPORT rcliTargets
+    FILE rcliTargets.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rcli
 )

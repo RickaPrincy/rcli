@@ -3,7 +3,7 @@
     
     #include <string>    
     
-    namespace RCli{
+    namespace rcli{
         class ColorConfig{
             public:
                 static std::string 
