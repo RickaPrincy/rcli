@@ -6,13 +6,32 @@ With rcli, you can effortlessly handle user interactions, process input, and imp
 
 For the color, rcli use [TColor](http://github.com/RickaPrincy/TColor)
 
-# BUILD :hammer:
+# Build and Install :hammer:
 
-- Dependancies
+- Build dependancies
     - CMake (Version 3.27 or later)
     - C++ Compiler with C++17 support
 
-- Run the configure_and_build.sh script to build rcli.
+```bash
+mkdir build
+
+cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+
+cd build
+
+sudo make install
+```
+or 
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/rcli/main/install.sh)
+```
+or
+
+```bash
+yay -Sy rcli #For system based on archlinux
+```
+### No dependencies required for the archlinux package
 
 # Gettting started
 
@@ -126,18 +145,7 @@ rcli provides various input types:
 ![Example1](./images/command.png)
 
 ![Example2](./images/input.png)
-
-# If you wanna install rcli
-
-```bash
-yay -Sy rcli #For system based on archlinux
-```
-or 
-
-```bash
-bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/rcli/main/install.sh)
-```
  
 # License 
 
-This project is licensed under the [MIT License](License.txt).
+This project is licensed under the [MIT License](LICENSE).
