@@ -6,14 +6,6 @@
 
 using namespace rcli;
 
-//default color
-std::string 
-    ColorConfig::_input_key_color = TColor::WHITE,
-    ColorConfig::_input_value_color = TColor::WHITE,
-    ColorConfig::_error_color = TColor::WHITE,
-    ColorConfig::_info_value_color = TColor::WHITE,
-    ColorConfig::_info_key_color = TColor::B_WHITE;
-
 App::App(std::string name, std::string version, std::string description): Command(name, description, [](Command*){}, false){
     std::regex pattern("\\d+\\.\\d+\\.\\d+"); 
     version = Utils::clean_text(version);
