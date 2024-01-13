@@ -2,5 +2,7 @@ BasedOnStyle: Google
 IndentWidth: 4
 AccessModifierOffset: -4
 NamespaceIndentation: All
-ColumnLimit: 100
-AlignAfterOpenBracket: DontAlign
+ColumnLimit: 100 
+# AlignAfterOpenBracket: AlwaysBreak
+# AllowShortFunctionsOnASingleLine: None
+# BinPackParameters: false
