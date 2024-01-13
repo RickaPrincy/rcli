@@ -30,6 +30,30 @@ if (RCLI_IS_MAIN_PROJECT AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(RCLI_BUILD_EXAMPLES ON)
 endif()
 
+# Clang format configuration
+find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
+
+if(CLANG_FORMAT_EXECUTABLE)
+    file(GLOB_RECURSE ALL_SOURCE_FILES
+        ${RCLI_SOURCE_DIR}/src/*.cpp
+        ${RCLI_SOURCE_DIR}/src/utils/*.cpp
+        ${RCLI_SOURCE_DIR}}/include/*.hpp
+    )
+
+    add_custom_target(
+        clang-format
+        COMMAND ${CLANG_FORMAT_EXECUTABLE}
+                -i
+                -style=file
+                ${ALL_SOURCE_FILES}
+        COMMENT "Running clang-format"
+    )
+else()
+    message(WARNING "clang-format not found. Clang-format target will not be available.")
+endif()
+
+
+# Add subdirectory
 add_subdirectory(src)
 
 if(RCLI_BUILD_EXAMPLES)
