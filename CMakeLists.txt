@@ -7,6 +7,7 @@ set(RCLI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Check if RCLI is the main project
 set(RCLI_IS_MAIN_PROJECT OFF)

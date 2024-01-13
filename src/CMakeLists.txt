@@ -10,9 +10,8 @@ endif()
 
 # Set include directories for the library
 target_include_directories(rcli
-    PUBLIC
+    PUBLIC 
         $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include/external>
 )
 
 # Set C++ standard
