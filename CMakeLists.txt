@@ -39,7 +39,6 @@ if(CLANG_FORMAT_EXECUTABLE)
         ${RCLI_SOURCE_DIR}/src/utils/*.cpp
         ${RCLI_SOURCE_DIR}}/include/*.hpp
     )
-
     add_custom_target(
         clang-format
         COMMAND ${CLANG_FORMAT_EXECUTABLE}
