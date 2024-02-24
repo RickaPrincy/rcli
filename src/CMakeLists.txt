@@ -47,6 +47,11 @@ install(
 configure_file(${RCLI_SOURCE_DIR}/cmake/rcliConfig.cmake.in
                ${CMAKE_BINARY_DIR}/cmake/rcliConfig.cmake @ONLY)
 
-# Install the Config, ConfigVersion and custom Find module files
-install(DIRECTORY ${CMAKE_BINARY_DIR}/cmake
+# Install the Config, ConfigVersion, and custom Find module files
+install(FILES ${CMAKE_BINARY_DIR}/cmake/rcliConfig.cmake
+              ${CMAKE_BINARY_DIR}/cmake/rcliVersion.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rcli)
+
+# Install external header files
+install(DIRECTORY ${RCLI_SOURCE_DIR}/include/external/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
