@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.27)
 
-project(rcli VERSION 1.5.0 LANGUAGES CXX)
+project(
+  rcli
+  VERSION 1.5.1
+  LANGUAGES CXX)
 
-#Set RCLI_SOURCE_DIR to the current path
+# Set RCLI_SOURCE_DIR to the current path
 set(RCLI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Set C++ standard
@@ -11,13 +14,13 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Check if RCLI is the main project
 set(RCLI_IS_MAIN_PROJECT OFF)
-if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    set(RCLI_IS_MAIN_PROJECT ON)
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  set(RCLI_IS_MAIN_PROJECT ON)
 endif()
 
-# Make default build type to "Debug" 
+# Make default build type to "Debug"
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
+  set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
 # Define Options
@@ -26,7 +29,7 @@ option(BUILD_SHARED_LIBS "Build rcli as a shared library" ON)
 option(RCLI_BUILD_EXAMPLES "Build the examples in the project" OFF)
 
 # Build example if build types is not release and rcli is a main project
-if (RCLI_IS_MAIN_PROJECT AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(RCLI_IS_MAIN_PROJECT AND CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(RCLI_BUILD_EXAMPLES ON)
 endif()
 
@@ -34,23 +37,17 @@ endif()
 find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
 
 if(CLANG_FORMAT_EXECUTABLE)
-    file(GLOB_RECURSE ALL_SOURCE_FILES
-        ${RCLI_SOURCE_DIR}/src/*.cpp
-        ${RCLI_SOURCE_DIR}/src/utils/*.cpp
-        ${RCLI_SOURCE_DIR}}/include/*.hpp
-    )
-    add_custom_target(
-        clang-format
-        COMMAND ${CLANG_FORMAT_EXECUTABLE}
-                -i
-                -style=file
-                ${ALL_SOURCE_FILES}
-        COMMENT "Running clang-format"
-    )
+  file(GLOB_RECURSE ALL_SOURCE_FILES ${RCLI_SOURCE_DIR}/src/*.cpp
+       ${RCLI_SOURCE_DIR}/src/utils/*.cpp ${RCLI_SOURCE_DIR}}/include/*.hpp)
+  add_custom_target(
+    clang-format
+    COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${ALL_SOURCE_FILES}
+    COMMENT "Running clang-format")
 else()
-    message(WARNING "clang-format not found. Clang-format target will not be available.")
+  message(
+    WARNING "clang-format not found. Clang-format target will not be available."
+  )
 endif()
-
 
 # Add subdirectory
 add_subdirectory(src)
@@ -58,39 +55,3 @@ add_subdirectory(src)
 if(RCLI_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif()
-
-# Install rcli header files
-
-include(GNUInstallDirs)
-
-install(
-    DIRECTORY ${RCLI_SOURCE_DIR}/include/rcli
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-install(
-    TARGETS rcli
-    DESTINATION lib/rcli-${version}
-    EXPORT rcli-targets
-)
-
-install(
-    EXPORT rcli-targets
-    DESTINATION lib/rcli-${version}
-)
-
-# Create and install package configuration and version files.
-configure_file(
-   ${RCLI_SOURCE_DIR}/cmake/rcli-config.cmake.in
-   ${CMAKE_CURRENT_BINARY_DIR}/cmake/rcli-config.cmake @ONLY)
-
-configure_file(
-   ${RCLI_SOURCE_DIR}/cmake/rcli-config-version.cmake.in
-   ${CMAKE_CURRENT_BINARY_DIR}/cmake/rcli-config-version.cmake @ONLY
-)
-
-install(
-    FILES ${RCLI_BINARY_DIR}/cmake/rcli-config.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/rcli-config-version.cmake
-    DESTINATION lib/rcli-${version}
-)
