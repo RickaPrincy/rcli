@@ -22,7 +22,7 @@ endif()
 
 # Define Options
 option(RCLI_INSTALL "Add install step for rcli" ${RCLI_IS_MAIN_PROJECT})
-option(BUILD_SHARED_LIBS "Build rcli as a shared library" OFF)
+option(BUILD_SHARED_LIBS "Build rcli as a shared library" ON)
 option(RCLI_BUILD_EXAMPLES "Build the examples in the project" OFF)
 
 # Build example if build types is not release and rcli is a main project
@@ -59,19 +59,38 @@ if(RCLI_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif()
 
-# Use GNUIInstallDirs for the installation
+# Install rcli header files
+
 include(GNUInstallDirs)
 
-# Install the library
-install(
-    TARGETS rcli
-    EXPORT rcliTargets
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-# Install rcli header files
 install(
     DIRECTORY ${RCLI_SOURCE_DIR}/include/rcli
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(
+    TARGETS rcli
+    DESTINATION lib/rcli-${version}
+    EXPORT rcli-targets
+)
+
+install(
+    EXPORT rcli-targets
+    DESTINATION lib/rcli-${version}
+)
+
+# Create and install package configuration and version files.
+configure_file(
+   ${RCLI_SOURCE_DIR}/cmake/rcli-config.cmake.in
+   ${CMAKE_CURRENT_BINARY_DIR}/cmake/rcli-config.cmake @ONLY)
+
+configure_file(
+   ${RCLI_SOURCE_DIR}/cmake/rcli-config-version.cmake.in
+   ${CMAKE_CURRENT_BINARY_DIR}/cmake/rcli-config-version.cmake @ONLY
+)
+
+install(
+    FILES ${RCLI_BINARY_DIR}/cmake/rcli-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/rcli-config-version.cmake
+    DESTINATION lib/rcli-${version}
 )

@@ -3,6 +3,5 @@ IndentWidth: 4
 AccessModifierOffset: -4
 NamespaceIndentation: All
 ColumnLimit: 100 
-# AlignAfterOpenBracket: AlwaysBreak
-# AllowShortFunctionsOnASingleLine: None
-# BinPackParameters: false
+AlignAfterOpenBracket: DontAlign
+AllowShortFunctionsOnASingleLine: Empty

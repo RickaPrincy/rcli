@@ -2,10 +2,9 @@
 #define __RCLI_APP__
 
 namespace rcli {
-
-    class App{
+    class App {
     public:
-        void parse(int argc, char *argv[]);
+        void sout();
     };
 
 }  // namespace rcli
