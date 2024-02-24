@@ -15,3 +15,4 @@ build
 out
 example/build
 .vscode
+*cmake-tools*

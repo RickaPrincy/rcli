@@ -22,7 +22,7 @@ set_target_properties(
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-  rcliVersion.cmake
+  ${CMAKE_BINARY_DIR}/cmake/rcliVersion.cmake
   VERSION ${PROJECT_VERSION}
   COMPATIBILITY SameMajorVersion)
 
@@ -44,7 +44,9 @@ install(
   FILE rcliTargets.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rcli)
 
+configure_file(${RCLI_SOURCE_DIR}/cmake/rcliConfig.cmake.in
+               ${CMAKE_BINARY_DIR}/cmake/rcliConfig.cmake @ONLY)
+
 # Install the Config, ConfigVersion and custom Find module files
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/rcliConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/rcliConfigVersion.cmake
+install(DIRECTORY ${CMAKE_BINARY_DIR}/cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rcli)
