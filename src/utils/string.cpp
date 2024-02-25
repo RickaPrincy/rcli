@@ -44,7 +44,7 @@ std::string rcli::Utils::clean_text(const std::string text, char symbol) {
     return temp_text;
 }
 
-std::vector<std::string> rcli::Utils::split(const std::string input,std::string delimiter) {
+std::vector<std::string> rcli::Utils::split(const std::string input, std::string delimiter) {
     std::vector<std::string> tokens;
     size_t start = 0;
     size_t end = input.find(delimiter);

@@ -1,30 +1,48 @@
-#include <iostream>
 #include <rcli/rcli.hpp>
-#include "rcli/input_config.hpp"
-#include "rcli/inputs.hpp"
+#include <iostream>
 
 using namespace rcli;
+void ask_gender(){
+    std::string gender = ask_value_in_list_as_number("What is your gender", {"M", "F"});
+    std::cout << "your gender is : " << gender << std::endl; 
+}
 
-int main(int argc, const char *argv[]) {
-    InputConfig config;
-    App ctemplate("ctemplate", "Cool application", "1.5.0");
-    Option option("-f, --file", "get file name", "file");
-
-    Command generate("generate", "generate new project", [&](Command *_generate) {
-        std::string file_name = _generate->get_option_value("file");
-        std::cout << "file -> " << file_name << std::endl;
-        std::cout << "path -> " << _generate->get_option_value("path") << std::endl;
-
-        if (file_name.empty()){
-            std::cout << ask_boolean("Wanna hangout ?", true) << std::endl;
-        }
-        
-        ask_value_in_list(config.text("WHo are you ?").required(true).clean(true), {"Hello", "princy"});
+int main(int argc, const char *argv[]){
+    ColorConfig::key= TColor::GREEN;
+    
+    InputConfig config = InputConfig()
+        .text("What your name")
+        .clean(false)
+        .required(true);
+    
+    App templi("example", "1.9.5", "Generate cool application");
+    templi.add_informations({
+        {"Author", "RickaPrincy"},
+        {"Github", "https://github.com/RickaPrincy/rcli"}
+    });
+    
+    Command init("init", "init new project", [](Command* _init){
+        std::cout <<"file value: " <<  _init->get_option_value("file") << std::endl;
+        std::cout <<"test value: " <<  _init->get_option_value("test") << std::endl;
     });
 
-    generate.add_option(&option);
-    generate.add_option("-p, --path", "say where is the path", "path");
+    init.add_option("-f,--file","Specify file name", "file");
+    init.add_option("-t,--test","test test", "test");
+    
+    Command hello("hello", "say hello", [&](Command* _hello){
+        std::string name = _hello->get_option_value("name");
+        if(name.empty()){
+            name = ask_input_value(config);
+        }
 
-    ctemplate.add_subcommand(&generate);
-    ctemplate.run(argc, argv);
+        ask_gender();
+        std::cout << "Hello  " << name  << std::endl;
+    });
+    
+    hello.add_option("-n,--name", "Specify your name", "name");
+    
+    templi.add_subcommand(&init);
+    templi.add_subcommand(&hello);
+    templi.run(argc, argv);
+    return 0;
 }
