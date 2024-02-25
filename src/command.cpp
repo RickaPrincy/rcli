@@ -1,3 +1,4 @@
+#include <memory>
 #include <rcli/command.hpp>
 
 using namespace rcli;
@@ -25,24 +26,24 @@ bool Command::call_if_matched(std::string text) {
     return false;
 }
 
-bool Command::is_matched(std::string text){
+bool Command::is_matched(std::string text) {
     return text == _name;
 }
 
 void Command::print_help() {
-    //TODO
+    // TODO
 }
 
 void rcli::Command::add_option(std::string options, std::string description, std::string key_name) {
-    this->add_option(Option(options, description, key_name));
+    this->add_option(new Option(options, description, key_name));
 }
 
-void rcli::Command::add_option(Option new_option) {
-    _options.push_back(new_option);
+void rcli::Command::add_option(Option* new_option) {
+    _options.push_back(std::make_shared<Option>(*new_option));
 }
 
-void rcli::Command::add_subcommand(Command new_command) {
-    _subcommands.push_back(new_command);
+void rcli::Command::add_subcommand(Command* new_command) {
+    _subcommands.push_back(std::make_shared<Command>(*new_command));
 }
 
 std::string Command::get_option_value(std::string key) {
@@ -53,11 +54,10 @@ std::string Command::get_option_value(std::string key) {
 }
 
 void Command::add_informations(std::map<std::string, std::string> informations) {
-    for (const auto& info: informations)
-        _informations.insert(info);
+    for (const auto& info : informations) _informations.insert(info);
 }
 
-//TODO: refactor this function
+// TODO: refactor this function
 void rcli::Command::parse(int argc, const char* argv[], int start) {
     if (start + 1 < argc) {
         std::string command_or_option = argv[start + 1];
@@ -74,7 +74,7 @@ void rcli::Command::parse(int argc, const char* argv[], int start) {
                 exit(EXIT_SUCCESS);
             }
             for (auto option : _options) {
-                std::string key_name = option.get_key_if_matched(command_or_option);
+                std::string key_name = option->get_key_if_matched(command_or_option);
                 if (key_name.empty()) {
                     continue;
                 }
@@ -93,8 +93,8 @@ void rcli::Command::parse(int argc, const char* argv[], int start) {
             }
         } else {
             for (auto command : _subcommands) {
-                if (command.is_matched(command_or_option)) {
-                    command.parse(argc, argv, start + 1);
+                if (command->is_matched(command_or_option)) {
+                    command->parse(argc, argv, start + 1);
                     exit(EXIT_SUCCESS);
                 }
             }
@@ -110,8 +110,6 @@ Command& Command::operator=(const Command& other) {
     if (this != &other) {
         _name = other._name;
         _description = other._description;
-        _options = other._options;
-        _subcommands = other._subcommands;
         _options_values = other._options_values;
     }
     return *this;

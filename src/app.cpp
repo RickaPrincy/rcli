@@ -5,7 +5,7 @@
 
 using namespace rcli;
 
-App::App(std::string name, std::string version, std::string description) {
+App::App(std::string name, std::string description, std::string version) {
     if (name.empty() || version.empty() || description.empty()) {
         Utils::log_error("\"name\", \"version\" and \"description\" are required");
         exit(EXIT_FAILURE);
