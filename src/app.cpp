@@ -1,8 +1,6 @@
-#include <iostream>
 #include <rcli/app.hpp>
 
-using namespace rcli;
-
-void App::sout() {
-    std::cout << "Hello world" << std::endl;
+rcli::App::App(std::string version, std::string description) {
+    this->version = version;
+    this->description = description;
 }

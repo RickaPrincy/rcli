@@ -1,11 +1,11 @@
-#ifndef __RCLI_APP__
-#define __RCLI_APP__
+#pragma once
+
+#include <string>
 
 namespace rcli {
     class App {
     public:
-        void sout();
+        std::string version, description;
+        App(std::string version, std::string description);
     };
-
 }  // namespace rcli
-#endif  // !__RCLI_APP__

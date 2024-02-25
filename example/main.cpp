@@ -1,11 +1,5 @@
-#include <iostream>
-#include <rcli/app.hpp>
-
-using namespace rcli;
+#include <rcli/rcli.hpp>
 
 int main(int argc, char *argv[]) {
-    App app;
-
-    app.sout();
     return 0;
 }
