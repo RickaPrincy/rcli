@@ -3,5 +3,7 @@
 #include <functional>
 
 namespace rcli {
-    using Callback = std::function<void()>;
-}
+    class Command;
+
+    using Callback = std::function<void(Command*)>;
+}  // namespace rcli

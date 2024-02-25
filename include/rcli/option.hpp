@@ -1,20 +1,18 @@
 #pragma once
 
-#include <rcli/types.hpp>
 #include <string>
 #include <vector>
 
 namespace rcli {
-
-    template <typename T>
     class Option {
+    private:
+        std::vector<std::string> _options;
+        std::string _description, _key_name;
+
     public:
-        T value;
-        std::string description;
-        std::vector<std::string> options;
+        std::string get_description();
+        std::string get_key_if_matched(std::string value);
 
-        Option(std::string options, std::string description);
-        Option(std::string options, std::string description, T value);
+        Option(std::string options, std::string description, std::string key_name);
     };
-
 }  // namespace rcli
