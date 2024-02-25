@@ -9,8 +9,10 @@ else()
 endif()
 
 # Set include directories for the library
-target_include_directories(rcli
-                           PUBLIC $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>)
+target_include_directories(
+  rcli
+  PUBLIC $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>
+  PUBLIC $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include/external>)
 
 # set properties
 set_target_properties(
@@ -51,3 +53,7 @@ configure_file(${RCLI_SOURCE_DIR}/cmake/rcliConfig.cmake.in
 install(FILES ${CMAKE_BINARY_DIR}/cmake/rcliConfig.cmake
               ${CMAKE_BINARY_DIR}/cmake/rcliVersion.cmake
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rcli)
+
+# Install external header files
+install(DIRECTORY ${RCLI_SOURCE_DIR}/include/external/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

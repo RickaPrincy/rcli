@@ -1,14 +1,15 @@
-#include <iostream>
-#include <ostream>
+#include <TColor/TColor.hpp>
+#include <rcli/color_config.hpp>
 
 #include "utils.hpp"
 
 using namespace rcli;
 
 void rcli::Utils::print_as_key_value(std::string key, std::string value) {
-    std::cout << key << ": " << value << "\n";
+    TColor::write(ColorConfig::key, key + ": ");
+    TColor::write(ColorConfig::value, value + "\n");
 }
 
 void rcli::Utils::log_error(std::string message) {
-    std::cout << "[ ERROR ]: " << message << std::endl;
+    TColor::write(TColor::B_RED, "[ ERROR ]: " + message + "\n");
 }

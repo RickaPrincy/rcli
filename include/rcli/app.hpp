@@ -11,7 +11,6 @@ namespace rcli {
     public:
         App(std::string name, std::string version, std::string description);
 
-        void print_help() override;
         virtual void print_version();
         void run(int argc, const char *argv[]);
     };

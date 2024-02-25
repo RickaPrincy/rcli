@@ -1,5 +1,9 @@
+#include <TColor/TColor.hpp>
 #include <memory>
+#include <rcli/color_config.hpp>
 #include <rcli/command.hpp>
+
+#include "utils/utils.hpp"
 
 using namespace rcli;
 
@@ -31,7 +35,20 @@ bool Command::is_matched(std::string text) {
 }
 
 void Command::print_help() {
-    // TODO
+    Utils::print_as_key_value("Command", _name + " <option> <sub_command>");
+    Utils::print_as_key_value("Description", _description);
+
+    TColor::write(ColorConfig::key, "\nOptions:\n");
+    for (const auto option : _options) {
+        Utils::print_as_key_value("\t" + option->get_base_names(), option->get_description());
+    }
+
+    if (!_subcommands.empty()) {
+        TColor::write(ColorConfig::key, "\nCommands:\n");
+        for (const auto command : _subcommands) {
+            Utils::print_as_key_value("\t" + command->get_name(), command->get_description());
+        }
+    }
 }
 
 void rcli::Command::add_option(std::string options, std::string description, std::string key_name) {
@@ -57,60 +74,45 @@ void Command::add_informations(std::map<std::string, std::string> informations) 
     for (const auto& info : informations) _informations.insert(info);
 }
 
-// TODO: refactor this function
 void rcli::Command::parse(int argc, const char* argv[], int start) {
-    if (start + 1 < argc) {
-        std::string command_or_option = argv[start + 1];
+    if (start >= argc) {
+        _callback(this);
+        return;
+    }
 
-        if (command_or_option == "--help" || command_or_option == "-h") {
+    const std::string current_action = argv[start];
+    if (current_action == "-h" || current_action == "--help") {
+        print_help();
+        return;
+    }
+
+    if (current_action.find("-") == 0) {
+        if (start + 1 >= argc) {
             print_help();
-            exit(EXIT_SUCCESS);
+            return;
         }
 
-        if (command_or_option.find("-") == 0) {
-            bool valid_option = false;
-            if (start + 2 >= argc) {
-                print_help();
-                exit(EXIT_SUCCESS);
+        for (const auto option : _options) {
+            std::string key_name = option->get_key_if_matched(current_action);
+            if (key_name.empty()) {
+                continue;
             }
-            for (auto option : _options) {
-                std::string key_name = option->get_key_if_matched(command_or_option);
-                if (key_name.empty()) {
-                    continue;
-                }
+            _options_values.insert(std::make_pair(key_name, argv[start + 1]));
+            parse(argc, argv, start + 2);
+            return;
+        }
 
-                _options_values.insert(std::make_pair(key_name, argv[start + 2]));
-                valid_option = true;
-                break;
-            }
+        print_help();
+        return;
+    }
 
-            if (!valid_option) {
-                print_help();
-                exit(EXIT_SUCCESS);
-            } else {
-                parse(argc, argv, start + 2);
-                exit(EXIT_SUCCESS);
-            }
-        } else {
-            for (auto command : _subcommands) {
-                if (command->is_matched(command_or_option)) {
-                    command->parse(argc, argv, start + 1);
-                    exit(EXIT_SUCCESS);
-                }
-            }
-            print_help();
-            exit(EXIT_SUCCESS);
+    for (const auto command : _subcommands) {
+        if (command->is_matched(current_action)) {
+            command->parse(argc, argv, start + 1);
+            return;
         }
     }
 
-    _callback(this);
-}
-
-Command& Command::operator=(const Command& other) {
-    if (this != &other) {
-        _name = other._name;
-        _description = other._description;
-        _options_values = other._options_values;
-    }
-    return *this;
+    print_help();
+    return;
 }

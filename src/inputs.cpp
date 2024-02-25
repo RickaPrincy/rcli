@@ -1,3 +1,4 @@
+#include <TColor/TColor.hpp>
 #include <iostream>
 #include <rcli/inputs.hpp>
 
@@ -12,6 +13,7 @@ std::string rcli::ask_input_value(InputConfig config) {
         message = message + " (default: \"" + config._default + "\" )";
     }
 
+    TColor::write(TColor::B_WHITE, message);
     std::string value = Utils::get_line();
 
     if (config._clean) value = Utils::clean_text(value);
@@ -46,7 +48,7 @@ bool rcli::ask_boolean(std::string text, bool default_value) {
 std::string rcli::ask_value_in_list_as_number(std::string text, std::vector<std::string> options) {
     std::vector<std::string> list_options;
     for (size_t i = 0; i < options.size(); i++) {
-        std::cout << i + 1 << ") " << options.at(i) << std::endl;
+        std::cout << i + 1 << ") " << options.at(i) << "\n";
         list_options.push_back(std::to_string(i + 1));
     }
 

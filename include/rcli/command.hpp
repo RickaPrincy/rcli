@@ -35,7 +35,6 @@ namespace rcli {
         void add_subcommand(Command* new_command);
         void add_informations(std::map<std::string, std::string> informations);
 
-        Command& operator=(const Command& other);
         Command(std::string name, std::string description, Callback callback);
     };
 }  // namespace rcli

@@ -18,6 +18,8 @@ int main(int argc, const char *argv[]) {
         if (file_name.empty()){
             std::cout << ask_boolean("Wanna hangout ?", true) << std::endl;
         }
+        
+        ask_value_in_list(config.text("WHo are you ?").required(true).clean(true), {"Hello", "princy"});
     });
 
     generate.add_option(&option);
