@@ -1,9 +1,5 @@
 include("${CMAKE_CURRENT_LIST_DIR}/rcliTargets.cmake")
 
-if(NOT TARGET rcli_shared OR NOT TARGET rcli_static)
-  message(FATAL_ERROR "Missing required targets rcli_shared or rcli_static")
-endif()
-
 if(@BUILD_SHARED_LIBS@)
   add_library(rcli_shared SHARED IMPORTED)
   set_target_properties(
