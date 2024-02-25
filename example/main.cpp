@@ -1,19 +1,14 @@
-#include "rcli/rcli.hpp"
+#include <rcli/rcli.hpp>
 #include <iostream>
 
 using namespace rcli;
-
 void ask_gender(){
-    std::string gender = ask_value_in_options("What is your gender", {"M", "F"});
+    std::string gender = ask_value_in_list_as_number("What is your gender", {"M", "F"});
     std::cout << "your gender is : " << gender << std::endl; 
 }
 
 int main(int argc, const char *argv[]){
-    ColorConfig::_error_color = TColor::RED;
-    ColorConfig::_info_key_color = TColor::B_BLUE;
-    ColorConfig::_info_value_color = TColor::BLUE;
-    ColorConfig::_input_key_color = TColor::B_GREEN;
-    ColorConfig::_input_value_color = TColor::GREEN;
+    ColorConfig::key= TColor::GREEN;
     
     InputConfig config = InputConfig()
         .text("What your name")
@@ -44,10 +39,10 @@ int main(int argc, const char *argv[]){
         std::cout << "Hello  " << name  << std::endl;
     });
     
-    hello.add_option(Option("-n,--name", "Specify your name", "name"));
+    hello.add_option("-n,--name", "Specify your name", "name");
     
-    templi.add_subcommand(init);
-    templi.add_subcommand(hello);
+    templi.add_subcommand(&init);
+    templi.add_subcommand(&hello);
     templi.run(argc, argv);
     return 0;
 }

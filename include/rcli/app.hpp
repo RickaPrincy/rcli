@@ -1,20 +1,17 @@
-#ifndef __RCLI_APP__
-#define __RCLI_APP__
-    
-    #include <string>    
-    #include "rcli/command.hpp"
+#pragma once
 
-    namespace rcli{
-        class App: public Command{
-            public:
-                std::string _version;
-                Callback callback;
-                
-                App(std::string name, std::string version, std::string description);
+#include <rcli/command.hpp>
+#include <string>
 
-                void print_help();
-                void print_version();
-                void run(int argc,const char *argv[]);
-        };
-    }
-#endif
+namespace rcli {
+    class App : public Command {
+    protected:
+        std::string _version;
+
+    public:
+        App(std::string name, std::string version, std::string description);
+
+        virtual void print_version();
+        void run(int argc, const char *argv[]);
+    };
+}  // namespace rcli

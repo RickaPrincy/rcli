@@ -1,47 +1,40 @@
-#ifndef __RCLI_COMMAND__
-#define __RCLI_COMMAND__
+#pragma once
 
-    #include <string>
-    #include <functional>
-    #include <vector>
-    #include <map>
-    #include "rcli/option.hpp"
+#include <map>
+#include <memory>
+#include <rcli/option.hpp>
+#include <rcli/types.hpp>
+#include <string>
+#include <vector>
 
-    namespace rcli{
-        class Command;
-        
-        using Callback = std::function<void(Command*)>;
-        
-        class Command{
-            protected:
-                std::string _name, _description,  _command_suffix;
-                Callback _callback;
-                std::vector<rcli::Option> _options;
-                std::vector<rcli::Command> _subcommands;
-                std::map<std::string,std::string> _options_values, _informations;
-                void parse(int argc,const char *argv[], int start);
-            public:
-                Command(std::string name, std::string description, Callback callback, bool subcommand = true);
-                
-                bool matched(std::string text);
-                bool call_if_matched(std::string text);
-                void print_help(bool is_subcommand = true);
-                
-                std::string get_name();
-                std::string get_description();
-                std::string get_option_value(std::string key);
-                
-                std::string get_suffix();
-                void set_suffix(std::string suffix);
+namespace rcli {
+    class Command {
+    protected:
+        std::string _name, _description;
+        Callback _callback;
+        std::vector<std::shared_ptr<Option>> _options;
+        std::vector<std::shared_ptr<Command>> _subcommands;
 
-                void add_option(Option new_option);
-                void add_option(std::string options, std::string description, std::string key_name);
-                void add_options(std::vector<Option> options);
-                void add_subcommand(Command new_command);
-                void add_subcommands(std::vector<Command> commands);
-                void add_informations(std::map<std::string,std::string> informations);
-                Command& operator=(const Command& other); 
-        };
-    }
+        std::map<std::string, std::string> _options_values, _informations;
 
-#endif
+        void parse(int argc, const char* argv[], int start);
+        bool is_matched(std::string text);
+        bool call_if_matched(std::string text);
+
+        Command(){};
+
+    public:
+        virtual void print_help();
+
+        std::string get_name();
+        std::string get_description();
+        std::string get_option_value(std::string key);
+
+        void add_option(Option* new_option);
+        void add_option(std::string options, std::string description, std::string key_name);
+        void add_subcommand(Command* new_command);
+        void add_informations(std::map<std::string, std::string> informations);
+
+        Command(std::string name, std::string description, Callback callback);
+    };
+}  // namespace rcli

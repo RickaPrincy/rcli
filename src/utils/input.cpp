@@ -1,17 +1,12 @@
-#include "rcli/utils.hpp"
-#include "TColor/TColor.hpp"
-#include "rcli/color_config.hpp"
 #include <iostream>
 
-using namespace rcli;
+#include "TColor/TColor.hpp"
+#include "utils.hpp"
 
-std::string rcli::Utils::get_line(bool do_endl, std::string color){
+std::string rcli::Utils::get_line(bool do_endl) {
     std::string value;
-    TColor::set_color(color);
+    TColor::set_color(TColor::WHITE);
     std::getline(std::cin, value);
-    TColor::set_color(ColorConfig::_input_value_color);
-
-    if(do_endl)
-        std::cout << std::endl;
+    if (do_endl) std::cout << std::endl;
     return value;
 }

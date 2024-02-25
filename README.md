@@ -50,7 +50,7 @@ Create an instance of the App class, specifying the application name, version, a
 
 ```cpp
 int main(int argc, const char *argv[]){
-    ColorConfig::_error_color = TColor::B_RED; // rcli use TColor
+    ColorConfig::key = TColor::B_RED; // rcli use TColor
     App example("example", "1.9.5", "cool application");
     // ...
     // (Your application logic will be added in the following steps)
@@ -67,7 +67,7 @@ Command init("init", "Initialize a new project", [](Command* _init){
     std::cout << "File value: " << _init->get_option_value("file") << std::endl;
 });
 
-init.add_option(Option("-f,--file", "Specify file name", "file"));
+init.add_option("-f,--file", "Specify file name", "file");
 
 Command hello("hello", "Say hello", [&](Command* _hello){
     std::string name = _hello->get_option_value("name");
@@ -86,8 +86,8 @@ hello.add_option("-n,--name", "Specify your name", "name");
 Add the commands to your App object, and run your CLI application by calling the run method:
 
 ```cpp
-templi.add_subcommand(init);
-templi.add_subcommand(hello);
+templi.add_subcommand(&init);
+templi.add_subcommand(&hello);
 templi.run(argc, argv);
 ```
 
@@ -123,7 +123,7 @@ rcli provides various input types:
         bool ask_boolean(std::string text, bool default_value = true);
 
         // ask in value list of options
-        std::string ask_value_in_options(std::string text, std::vector<std::string> options);
+        std::string ask_value_in_list_as_number(std::string text, std::vector<std::string> options);
 
     } // namespace rcli
 

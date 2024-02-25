@@ -1,13 +1,15 @@
-#include "rcli/utils.hpp"
-#include "TColor/TColor.hpp"
-#include "rcli/color_config.hpp"
+#include <TColor/TColor.hpp>
+#include <rcli/color_config.hpp>
+
+#include "utils.hpp"
 
 using namespace rcli;
 
-void rcli::Utils::write_key_value(std::string key, std::string value, bool is_info){
-    auto key_color = is_info ? ColorConfig::_info_key_color : ColorConfig::_input_key_color;
-    auto value_color = is_info ? ColorConfig::_input_value_color: ColorConfig::_input_value_color;
+void rcli::Utils::print_as_key_value(std::string key, std::string value) {
+    TColor::write(ColorConfig::key, key + ": ");
+    TColor::write(ColorConfig::value, value + "\n");
+}
 
-    TColor::write(key_color, key + ": ");
-    TColor::write_endl(value_color, value);
+void rcli::Utils::log_error(std::string message) {
+    TColor::write(TColor::B_RED, "[ ERROR ]: " + message + "\n");
 }
