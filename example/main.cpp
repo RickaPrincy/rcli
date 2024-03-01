@@ -16,7 +16,7 @@ int main(int argc, const char *argv[]){
         .required(true)
         .default_value("RickaPrincy");
     
-    App templi("example", "1.9.5", "Generate cool application");
+    App templi("example", "Generate cool application",  "1.9.5");
     templi.add_informations({
         {"Author", "RickaPrincy"},
         {"Github", "https://github.com/RickaPrincy/rcli"}

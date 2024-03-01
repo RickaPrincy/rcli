@@ -35,16 +35,16 @@ bool Command::is_matched(std::string text) {
 }
 
 void Command::print_help() {
-    Utils::print_as_key_value("Command", _name + " <option> <sub_command>");
-    Utils::print_as_key_value("Description", _description);
+    Utils::print_as_key_value(" Usage", _name + " <sub_command> <option option_value>");
+    Utils::print_as_key_value(" Description", _description);
 
-    TColor::write(ColorConfig::key, "\nOptions:\n");
+    TColor::write(ColorConfig::key, "\n Options:\n");
     for (const auto option : _options) {
         Utils::print_as_key_value("\t" + option->get_base_names(), option->get_description());
     }
 
     if (!_subcommands.empty()) {
-        TColor::write(ColorConfig::key, "\nCommands:\n");
+        TColor::write(ColorConfig::key, "\n Commands:\n");
         for (const auto command : _subcommands) {
             Utils::print_as_key_value("\t" + command->get_name(), command->get_description());
         }
