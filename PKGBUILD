@@ -1,7 +1,7 @@
 # Maintainer: RickaPrincy <rckprincy@gmail.com>
 pkgname=rcli
-pkgver=1.5.1
-pkgrel=6
+pkgver=1.5.2
+pkgrel=7
 pkgdesc="Simple C++ library that simplifies the creation of CLI applications"
 arch=(any)
 url="https://github.com/RickaPrincy/rcli"
