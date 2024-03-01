@@ -35,10 +35,10 @@ void rcli::App::run(int argc, const char *argv[]) {
 }
 
 void rcli::App::print_version() {
-    Utils::print_as_key_value("Name", _name);
-    Utils::print_as_key_value("Version", _version);
-    Utils::print_as_key_value("Description", _description);
+    Utils::print_as_key_value(" Name", _name);
+    Utils::print_as_key_value(" Version", _version);
+    Utils::print_as_key_value(" Description", _description);
     for (const auto &[key, value] : _informations) {
-        Utils::print_as_key_value(key, value);
+        Utils::print_as_key_value(" " + key, value);
     }
 }

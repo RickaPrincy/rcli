@@ -10,10 +10,10 @@ std::string rcli::ask_input_value(InputConfig config) {
     std::string message{config._text};
 
     if (config._default != "") {
-        message = message + " (default: \"" + config._default + "\" )";
+        message = message + " [ Default: \"" + config._default + "\" ]";
     }
 
-    TColor::write(TColor::B_WHITE, message);
+    TColor::write(TColor::B_WHITE, " " +  message + "\n ==> ");
     std::string value = Utils::get_line();
 
     if (config._clean) value = Utils::clean_text(value);
@@ -22,6 +22,8 @@ std::string rcli::ask_input_value(InputConfig config) {
         Utils::log_error("This is required");
         return rcli::ask_input_value(config);
     }
+
+    TColor::write_endl(TColor::B_WHITE, " --------------------------------------------------------------------");
     return value;
 }
 
@@ -30,7 +32,7 @@ std::string rcli::ask_value_in_list(
     std::string value = rcli::ask_input_value(config);
 
     if (!Utils::some(value, options, ignore_case)) {
-        Utils::log_error("These are the expected values [" + Utils::join(options, ", ") + "]");
+        Utils::log_error("These are the expected values [ " + Utils::join(options, ", ") + " ]");
         return rcli::ask_value_in_list(config, options, ignore_case);
     }
     return value;
@@ -48,7 +50,7 @@ bool rcli::ask_boolean(std::string text, bool default_value) {
 std::string rcli::ask_value_in_list_as_number(std::string text, std::vector<std::string> options) {
     std::vector<std::string> list_options;
     for (size_t i = 0; i < options.size(); i++) {
-        std::cout << i + 1 << ") " << options.at(i) << "\n";
+        std::cout << " " << i + 1 << ": " << options.at(i) << "\n";
         list_options.push_back(std::to_string(i + 1));
     }
 

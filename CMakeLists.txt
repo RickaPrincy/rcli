@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.27)
 
 project(
   rcli
-  VERSION 1.5.1
+  VERSION 1.5.2
   LANGUAGES CXX)
 
 # Set RCLI_SOURCE_DIR to the current path

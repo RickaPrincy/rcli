@@ -6,32 +6,55 @@ With rcli, you can effortlessly handle user interactions, process input, and imp
 
 For the color, rcli use [TColor](http://github.com/RickaPrincy/TColor)
 
-# Build and Install :hammer:
+# Installation :seedling:
 
-- Build dependancies
+- Archlinux
+
+```bash
+yay -Sy rcli 
+```
+For the moment, you have to build rcli to use it if you use another system (not archlinux)
+
+- Dependancies
+
     - CMake (Version 3.27 or later)
     - C++ Compiler with C++17 support
 
 ```bash
-mkdir build
+bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/rcli/main/install.sh)
+```
 
-cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+- Build manually
+
+```bash
+git clone -b v1.5.2 https://github.com/RickaPrincy/rcli.git
+
+cd rcli
+
+mkdir build
 
 cd build
 
+cmake -DCMAKE_BUILD_TYPE=Release -S .. -B .
+
 sudo make install
+
+cd ../..
+
+rm -rf rcli 
 ```
-or 
+#### :warning: If some libs are not found after building manually
+
+Identify the installation path of the missing library. For example, let's assume the library is installed in `/usr/local/lib` (on linux it should be there).
+
+If you are using Linux, add the following code to your `~/.zshrc` or `~/.bashrc` based on what you use (replacing `/usr/local/lib` with the actual installation path):
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/rcli/main/install.sh)
+export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH
 ```
-or
 
-```bash
-yay -Sy rcli #For system based on archlinux
-```
-### No dependencies required for the archlinux package
+- You can also simply use rcli as a submodule.
+
 
 # Gettting started
 

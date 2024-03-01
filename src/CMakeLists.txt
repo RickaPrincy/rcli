@@ -1,5 +1,14 @@
 # List all source files
-file(GLOB_RECURSE RCLI_SOURCES CONFIGURE_DEPENDS "*.cpp")
+set(RCLI_SOURCES
+    app.cpp
+    color_config.cpp
+    command.cpp
+    inputs.cpp
+    option.cpp
+    utils/input.cpp
+    utils/print.cpp
+    utils/string.cpp
+)
 
 # Create the library
 if(BUILD_SHARED_LIBS)

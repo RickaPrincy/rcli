@@ -11,5 +11,5 @@ void rcli::Utils::print_as_key_value(std::string key, std::string value) {
 }
 
 void rcli::Utils::log_error(std::string message) {
-    TColor::write(TColor::B_RED, "[ ERROR ]: " + message + "\n");
+    TColor::write(TColor::B_RED, " [ ERROR ]: " + message + "\n");
 }

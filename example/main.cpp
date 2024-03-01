@@ -8,14 +8,15 @@ void ask_gender(){
 }
 
 int main(int argc, const char *argv[]){
-    ColorConfig::key= TColor::GREEN;
+    ColorConfig::key= TColor::B_GREEN;
     
     InputConfig config = InputConfig()
         .text("What your name")
         .clean(false)
-        .required(true);
+        .required(true)
+        .default_value("RickaPrincy");
     
-    App templi("example", "1.9.5", "Generate cool application");
+    App templi("example", "Generate cool application",  "1.9.5");
     templi.add_informations({
         {"Author", "RickaPrincy"},
         {"Github", "https://github.com/RickaPrincy/rcli"}
