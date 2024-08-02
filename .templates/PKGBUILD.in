@@ -1,13 +1,13 @@
 # Author: RickaPrincy <rckprincy@gmail.com>
 pkgname=rcli
-pkgver=2.0.0
+pkgver=@RCLI_LIB_VERSION@
 pkgrel=1
 pkgdesc="Starter of styled cli for c++"
 arch=('x86_64')
 depends=()
 url="https://github.com/RickaPrincy/rcli.git"
 license=('MIT')
-source=("rcli@$pkgver.tar.gz::https://github.com/RickaPrincy/rcli.git/releases/download/v0.0.1/rcli@$pkgver.tar.gz")
+source=("rcli@$pkgver.tar.gz::https://github.com/RickaPrincy/rcli.git/releases/download/v@RCLI_VERSION@/rcli@$pkgver.tar.gz")
 
 sha256sums=("SHASUM")
 

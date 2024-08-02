@@ -1,4 +1,4 @@
-name: aur-publish
+name: aur-publish 
 on:
   workflow_dispatch:
 jobs:
@@ -6,8 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Publish AUR package
+      
+      - name: Publish rcli AUR package
         uses: KSXGitHub/github-actions-deploy-aur@v2.7.0
         with:
           pkgname: rcli 
