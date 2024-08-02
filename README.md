@@ -1,3 +1,5 @@
+# Project generated with [Templi](https://github.com/RickaPrincy/Templi)
+
 # rcli :wrench:
 
 rcli is a powerful C++ library that simplifies the creation of CLI applications. It provides convenient user `input functions` and efficiently manages command-line `options` and `subcommands`. 

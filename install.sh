@@ -1,8 +1,9 @@
 #! /bin/bash
-git clone -b v1.5.2 http://github.com/RickaPrincy/rcli.git
-cd rcli
-cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+git clone -b v0.0.1 https://github.com/RickaPrincy/rcli.git 
+cd rcli 
+mkdir build
 cd build
+cmake -DCMAKE_BUILD_TYPE=Release -S .. -B .
 sudo make install
 cd ../..
-rm -rf rcli
+rm -rf rcli 

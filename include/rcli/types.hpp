@@ -2,8 +2,9 @@
 
 #include <functional>
 
-namespace rcli {
-    class Command;
+namespace rcli
+{
+	class Command;
 
-    using Callback = std::function<void(Command*)>;
+	using Callback = std::function<void(Command *)>;
 }  // namespace rcli

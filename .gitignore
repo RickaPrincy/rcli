@@ -1,4 +1,3 @@
-.cache
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -12,7 +11,9 @@ CTestTestfile.cmake
 _deps
 
 build
-out
 example/build
-.vscode
+.vscode/
+.cache/
 *cmake-tools*
+out
+release

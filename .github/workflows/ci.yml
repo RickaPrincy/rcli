@@ -1,0 +1,45 @@
+name: ci 
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: build with cmake
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: install TColor
+      run: bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/TColor.hpp/main/install.sh)
+
+    - name: configure 
+      run: cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+
+    - name: build 
+      run: cd build; make
+
+  style:
+    runs-on: ubuntu-latest
+    name: check style 
+    strategy:
+      matrix:
+        path:
+          - 'src'
+          - 'include'
+          - 'example'
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: install TColor
+      run: bash <(curl -s https://raw.githubusercontent.com/RickaPrincy/TColor.hpp/main/install.sh)
+
+    - name: Run clang-format
+      uses: jidicula/clang-format-action@v4.13.0
+      with:
+        clang-format-version: '18'
+        check-path: ${{ matrix.path }}
+        fallback-style: 'Mozilla'
