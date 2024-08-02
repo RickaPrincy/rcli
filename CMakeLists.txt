@@ -69,8 +69,9 @@ endif()
 # clang-format configuration
 find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
 if(CLANG_FORMAT_EXECUTABLE)
-  file(GLOB_RECURSE ALL_SOURCE_FILES "${RCLI_SOURCE_DIR}/sources/lib/*.cpp"
-       "${RCLI_SOURCE_DIR}/include/rcli/*.hpp")
+  file(GLOB_RECURSE ALL_SOURCE_FILES "${RCLI_SOURCE_DIR}/sources/*.cpp"
+       "${RCLI_SOURCE_DIR}/include/*.hpp" "${RCLI_SOURCE_DIR}/sources/*.hpp"
+       "${RCLI_SOURCE_DIR}/example/*.cpp")
   add_custom_target(
     clang-format
     COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${ALL_SOURCE_FILES}
