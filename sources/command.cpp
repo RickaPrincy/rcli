@@ -63,7 +63,7 @@ void Command::print_help()
 
 void rcli::Command::add_option(std::string options, std::string description, std::string key_name)
 {
-	this->add_option(new Option(options, description, key_name));
+	_options.push_back(std::make_shared<rcli::Option>(options, description, key_name));
 }
 
 void rcli::Command::add_option(Option *new_option)
