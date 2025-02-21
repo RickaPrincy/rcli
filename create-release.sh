@@ -42,4 +42,4 @@ create_lib_release
 
 git add --all
 git commit -m "release: rcli@2.0.0"
-git tag -a v0.0.1 -m "rcli v0.0.1"
+git tag -a v2.0.0 -m "rcli v2.0.0"

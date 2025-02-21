@@ -2,12 +2,9 @@ cmake_minimum_required(VERSION 3.18)
 
 project(rcli_tools VERSION 0.0.1)
 
-# c++ 17 by default
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# deps find_package(rcli REQUIRED)
 
 set(RCLI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(RCLI_IS_MAIN_PROJECT OFF)
@@ -19,8 +16,8 @@ endif()
 set(RCLI_LIB_NAME rcli)
 set(RCLI_LIB_VERSION 2.0.0)
 set(RCLI_LIB_VERSION_MAJOR 2)
-set(RCLI_VERSION ${PROJECT_VERSION})
-set(RCLI_VERSION_MAJOR ${PROJECT_VERSION_MAJOR})
+set(RCLI_VERSION ${RCLI_LIB_VERSION})
+set(RCLI_VERSION_MAJOR ${RCLI_LIB_VERSION_MAJOR})
 
 # list of options
 option(BUILD_SHARED_LIBS "Build rcli as a shared library"
@@ -51,6 +48,9 @@ if(RCLI_IS_MAIN_PROJECT)
   configure_file(${RCLI_SOURCE_DIR}/.templates/PKGBUILD.in
                  ${RCLI_SOURCE_DIR}/PKGBUILD @ONLY)
 
+  configure_file(${RCLI_SOURCE_DIR}/.templates/install.sh.in
+                 ${RCLI_SOURCE_DIR}/install.sh @ONLY)
+  
   configure_file(${RCLI_SOURCE_DIR}/.templates/create-release.sh.in
                  ${RCLI_SOURCE_DIR}/create-release.sh @ONLY)
 

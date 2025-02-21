@@ -1,6 +1,6 @@
 #! /bin/bash
-git clone -b 2.0.0 {{GIT_URL}} 
-cd 2.0.0 
+git clone -b @RCLI_LIB_VERSION@ {{GIT_URL}} 
+cd @RCLI_LIB_VERSION@ 
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -S .. -B .
