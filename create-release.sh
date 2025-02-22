@@ -23,7 +23,7 @@ create_tar_release(){
 
 create_lib_release(){
 
-    local RELEASE_NAME=rcli@2.0.0
+    local RELEASE_NAME=rcli@2.0.1
     release_path+=("${RELEASE_NAME}")
     
     mkdir -p "${RELEASE_NAME}"
@@ -41,5 +41,5 @@ create_lib_release(){
 create_lib_release
 
 git add --all
-git commit -m "release: rcli@2.0.0"
-git tag -a v2.0.0 -m "rcli v2.0.0"
+git commit -m "release: rcli@2.0.1"
+git tag -a v2.0.1 -m "rcli v2.0.1"

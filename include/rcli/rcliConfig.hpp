@@ -1,1 +1,1 @@
-#define RCLI_VERSION "2.0.0"
+#define RCLI_VERSION "2.0.1"
