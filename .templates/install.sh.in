@@ -1,6 +1,6 @@
 #! /bin/bash
-git clone -b @RCLI_LIB_VERSION@ {{GIT_URL}} 
-cd @RCLI_LIB_VERSION@ 
+git clone -b v@RCLI_LIB_VERSION@ https://github.com/RickaPrincy/rcli.git 
+cd @RCLI_LIB_NAME@ 
 mkdir build
 cd build
 cmake -DCMAKE_BUILD_TYPE=Release -S .. -B .
