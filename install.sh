@@ -1,5 +1,5 @@
 #! /bin/bash
-git clone -b v2.0.2 https://github.com/RickaPrincy/rcli.git 
+git clone -b v2.0.21 https://github.com/RickaPrincy/rcli.git 
 cd rcli 
 mkdir build
 cd build

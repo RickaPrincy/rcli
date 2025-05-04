@@ -120,18 +120,19 @@ void rcli::Command::parse(int argc, const char *argv[], int start)
 			std::string key_name = option->get_key_if_matched(current_action);
 			if (key_name.empty())
 			{
-				current_action.erase(0, 1);
-				_options_values.insert(std::make_pair(current_action, argv[start + 1]));
+				continue;
 			}
 			else
 			{
 				_options_values.insert(std::make_pair(key_name, argv[start + 1]));
 			}
+
 			parse(argc, argv, start + 2);
 			return;
 		}
-
-		print_help();
+		current_action.erase(0, 1);
+		_options_values.insert(std::make_pair(current_action, argv[start + 1]));
+		parse(argc, argv, start + 2);
 		return;
 	}
 
