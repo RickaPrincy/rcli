@@ -2,6 +2,7 @@
 #include <memory>
 #include <rcli/color_config.hpp>
 #include <rcli/command.hpp>
+#include <utility>
 
 #include "utils/utils.hpp"
 
@@ -99,7 +100,7 @@ void rcli::Command::parse(int argc, const char *argv[], int start)
 		return;
 	}
 
-	const std::string current_action = argv[start];
+	std::string current_action = argv[start];
 	if (current_action == "-h" || current_action == "--help")
 	{
 		print_help();
@@ -119,9 +120,13 @@ void rcli::Command::parse(int argc, const char *argv[], int start)
 			std::string key_name = option->get_key_if_matched(current_action);
 			if (key_name.empty())
 			{
-				continue;
+				current_action.erase(0, 1);
+				_options_values.insert(std::make_pair(current_action, argv[start + 1]));
 			}
-			_options_values.insert(std::make_pair(key_name, argv[start + 1]));
+			else
+			{
+				_options_values.insert(std::make_pair(key_name, argv[start + 1]));
+			}
 			parse(argc, argv, start + 2);
 			return;
 		}

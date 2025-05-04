@@ -50,7 +50,7 @@ if(RCLI_IS_MAIN_PROJECT)
 
   configure_file(${RCLI_SOURCE_DIR}/.templates/install.sh.in
                  ${RCLI_SOURCE_DIR}/install.sh @ONLY)
-  
+
   configure_file(${RCLI_SOURCE_DIR}/.templates/create-release.sh.in
                  ${RCLI_SOURCE_DIR}/create-release.sh @ONLY)
 
@@ -66,19 +66,34 @@ if(RCLI_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif()
 
-# clang-format configuration
+# Find clang-format executable
 find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
 if(CLANG_FORMAT_EXECUTABLE)
-  file(GLOB_RECURSE ALL_SOURCE_FILES "${RCLI_SOURCE_DIR}/sources/*.cpp"
-       "${RCLI_SOURCE_DIR}/include/*.hpp" "${RCLI_SOURCE_DIR}/sources/*.hpp"
-       "${RCLI_SOURCE_DIR}/example/*.cpp")
+  # Define the path to your clang-format configuration file
+  set(CLANG_FORMAT_STYLE_FILE "${CMAKE_SOURCE_DIR}/.clang-format")
+
+  # Check if clang-format configuration file exists
+  if(NOT EXISTS "${CLANG_FORMAT_STYLE_FILE}")
+    message(
+      WARNING
+        "clang-format style file (.clang-format) not found, using default style."
+    )
+  endif()
+
+  # Gather all source files for formatting
+  file(GLOB_RECURSE ALL_SOURCE_FILES "${TEMPLI_SOURCE_DIR}/src/lib/*.cpp"
+       "${TEMPLI_SOURCE_DIR}/src/cli/*.cpp"
+       "${TEMPLI_SOURCE_DIR}/include/Templi/*.hpp")
+
+  # Define custom target for clang-format
   add_custom_target(
     clang-format
     COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${ALL_SOURCE_FILES}
-    COMMENT "Running clang-format")
+    COMMENT "Running clang-format on source files")
+
 else()
   message(
-    WARNING "clang-format not found. Clang-format target will not be available."
+    WARNING "clang-format not found. clang-format target will not be available."
   )
 endif()
 

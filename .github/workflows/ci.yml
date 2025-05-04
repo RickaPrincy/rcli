@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         path:
-          - 'src'
+          - 'sources'
           - 'include'
           - 'example'
     steps:
