@@ -14,14 +14,13 @@ endif()
 
 # target names
 set(RCLI_LIB_NAME rcli)
-set(RCLI_LIB_VERSION 2.0.21)
+set(RCLI_LIB_VERSION 2.0.22)
 set(RCLI_LIB_VERSION_MAJOR 2)
 set(RCLI_VERSION ${RCLI_LIB_VERSION})
 set(RCLI_VERSION_MAJOR ${RCLI_LIB_VERSION_MAJOR})
 
 # list of options
-option(BUILD_SHARED_LIBS "Build rcli as a shared library"
-       ${RCLI_IS_MAIN_PROJECT})
+option(BUILD_SHARED_LIBS "Build rcli as a shared library" OFF)
 option(RCLI_LIB_BUILD "Build rcli lib" ON)
 option(RCLI_LIB_INSTALL "Install rcli lib" ${RCLI_IS_MAIN_PROJECT})
 option(RCLI_BUILD_EXAMPLES "Build the examples in the project" OFF)

@@ -28,6 +28,8 @@ int main(int argc, const char *argv[])
 		[](Command *_init)
 		{
 			std::cout << "file value: " << _init->get_option_value("file") << std::endl;
+			std::cout << "another: " << _init->get_option_value("another") << std::endl;
+			std::cout << "another-value: " << _init->get_option_value("another-value") << std::endl;
 			std::cout << "test value: " << _init->get_option_value("test") << std::endl;
 		});
 
