@@ -9,7 +9,7 @@ url="https://github.com/RickaPrincy/rcli"
 license=('MIT')
 source=("rcli@$pkgver.tar.gz::https://github.com/RickaPrincy/rcli/releases/download/v2.0.23/rcli@$pkgver.tar.gz")
 
-sha256sums=("SHASUM")
+sha256sums=("bd430939e0a011e9a00e7f18097b20f6da208634900148038fa453804f9568d9")
 
 package() {
     echo "Installing to \"$pkgdir/usr/\""
