@@ -2,7 +2,7 @@
 pkgname=rcli
 pkgver=@RCLI_LIB_VERSION@
 pkgrel=1
-pkgdesc="Starter of styled cli for c++"
+pkgdesc="Library to parse user command-line input"
 arch=('x86_64')
 depends=()
 url="https://github.com/RickaPrincy/rcli"

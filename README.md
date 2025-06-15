@@ -4,10 +4,6 @@
 
 rcli is a powerful C++ library that simplifies the creation of CLI applications. It provides convenient user `input functions` and efficiently manages command-line `options` and `subcommands`. 
 
-With rcli, you can effortlessly handle user interactions, process input, and implement features like help commands (your_cli -h).
-
-For the color, rcli use [TColor](http://github.com/RickaPrincy/TColor)
-
 # Installation :seedling:
 
 - Archlinux
@@ -75,12 +71,10 @@ Create an instance of the App class, specifying the application name, version, a
 
 ```cpp
 int main(int argc, const char *argv[]){
-    ColorConfig::key = TColor::B_RED; // rcli use TColor
-    App example("example", "1.9.5", "cool application");
+    app example("example", "1.9.5", "cool application");
     // ...
     // (Your application logic will be added in the following steps)
-    example.run(argc, argv);
-    return 0;
+    return example.run(argc, argv);
 }
 ```
 ### Step 3: Define Commands and Options
@@ -88,19 +82,15 @@ int main(int argc, const char *argv[]){
 Define commands and options within your application. For example, you can create an "init" command and a "hello" command. Specify options for user input, such as the file name and user's name:
 
 ```cpp
-Command init("init", "Initialize a new project", [](Command* _init){
-    std::cout << "File value: " << _init->get_option_value("file") << std::endl;
+command init("init", "Initialize a new project", [](command* _init){
+    std::cout << "File value: " << _init->get_option_value("file") << "\n";
 });
 
 init.add_option("-f,--file", "Specify file name", "file");
 
-Command hello("hello", "Say hello", [&](Command* _hello){
+command hello("hello", "Say hello", [&](command* _hello){
     std::string name = _hello->get_option_value("name");
-    if (name.empty()) {
-        // If name is not provided as an option, ask the user for input
-        name = ask_input_value("What is your name");
-    }
-    std::cout << "Hello, " << name << "!" << std::endl;
+    std::cout << "Hello, " << name << "!" << "\n";
 });
 
 hello.add_option("-n,--name", "Specify your name", "name");
@@ -118,59 +108,14 @@ templi.run(argc, argv);
 
 # Another features 
 
-### Automatically Added Options :bulb:
+## Automatically Added Options :bulb:
 
 rcli automatically adds help options `(-h and --help)` to all commands, and version options `(-v and --version)` to the main App object. Users can use these options to get information about your application.
 
-### Use Various Input Types in rcli :jack_o_lantern:
-
-rcli provides various input types:
-
-```cpp
-#ifndef __RCLI_INPUTS__
-#define __RCLI_INPUTS__
-    
-    #include <vector>
-    #include <string>
-
-    namespace rcli {
-
-        // one simple value
-        std::string ask_input_value(InputConfig config);
-
-        // multiples values
-        std::vector<std::string> ask_inputs_values(std::vector<InputConfig> configs);
-
-        // ask the value in list without showing the list
-        std::string ask_value_in_list(InputConfig config, std::vector<std::string> options, bool ignore_case = false);
-
-        // ask single one boolean
-        bool ask_boolean(std::string text, bool default_value = true);
-
-        // ask in value list of options
-        std::string ask_value_in_list_as_number(std::string text, std::vector<std::string> options);
-
-    } // namespace rcli
-
-#endif
-```
-
-# Default color
+# Preview
 
 ![Example0](./images/default_color.png)
 
-# Customized_color
-
-![Example1](./images/customized_color.png)
-
-# Some output
-
-![Example2](./images/version.png)
-
-![Example1](./images/command.png)
-
-![Example2](./images/input.png)
- 
 # License 
 
 This project is licensed under the [MIT License](LICENSE).

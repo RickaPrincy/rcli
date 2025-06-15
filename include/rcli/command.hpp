@@ -1,42 +1,47 @@
 #pragma once
 
+#include <functional>
 #include <map>
 #include <memory>
 #include <rcli/option.hpp>
-#include <rcli/types.hpp>
 #include <string>
 #include <vector>
 
 namespace rcli
 {
-	class Command
+	class command;
+
+	using callback = std::function<void(command *)>;
+
+	class command
 	{
 	protected:
-		std::string _name, _description;
-		Callback _callback;
-		std::vector<std::shared_ptr<Option>> _options;
-		std::vector<std::shared_ptr<Command>> _subcommands;
+		callback m_callback{};
+		std::string m_name{}, m_description{};
+		std::vector<std::shared_ptr<option>> m_options{};
+		std::vector<std::shared_ptr<command>> m_subcommands{};
+		std::map<std::string, std::string> m_options_values{}, m_informations{};
 
-		std::map<std::string, std::string> _options_values, _informations;
+		auto match(const std::string &text) -> bool;
+		auto call_if_match(const std::string &text) -> bool;
+		auto parse(int argc, const char *argv[], int start)	 // NOLINT(modernize-avoid-c-arrays)
+			-> void;
 
-		void parse(int argc, const char *argv[], int start);
-		bool is_matched(std::string text);
-		bool call_if_matched(std::string text);
-
-		Command() = default;
+		command() = default;
 
 	public:
-		virtual void print_help();
+		virtual auto print_help() -> void;
 
-		std::string get_name();
-		std::string get_description();
-		std::string get_option_value(std::string key);
+		[[nodiscard]] auto get_name() const -> const std::string &;
+		[[nodiscard]] auto get_description() const -> const std::string &;
+		[[nodiscard]] auto get_option_value(const std::string &key) -> std::string;
 
-		void add_option(Option *new_option);
-		void add_option(std::string options, std::string description, std::string key_name);
-		void add_subcommand(Command *new_command);
-		void add_informations(std::map<std::string, std::string> informations);
+		auto add_option(option *new_option) -> void;
+		auto add_option(std::string options, std::string description, std::string key_name) -> void;
 
-		Command(std::string name, std::string description, Callback callback);
+		auto add_subcommand(command *new_command) -> void;
+		auto add_informations(std::map<std::string, std::string> informations) -> void;
+
+		command(std::string name, std::string description, callback callback);
 	};
 }  // namespace rcli

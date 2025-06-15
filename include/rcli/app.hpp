@@ -5,15 +5,15 @@
 
 namespace rcli
 {
-	class App : public Command
+	class app : public command
 	{
 	protected:
-		std::string _version;
+		std::string m_version;
 
 	public:
-		App(std::string name, std::string version, std::string description);
+		app(std::string name, std::string version, std::string description);
 
-		virtual void print_version();
-		void run(int argc, const char *argv[]);
+		virtual auto print_version() -> void;
+		auto run(int argc, const char *argv[]) -> int;	// NOLINT(modernize-avoid-c-arrays)
 	};
 }  // namespace rcli

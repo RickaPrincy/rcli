@@ -1,150 +1,155 @@
-#include <TColor/TColor.hpp>
-#include <memory>
-#include <rcli/color_config.hpp>
+#include <iostream>
 #include <rcli/command.hpp>
-#include <utility>
 
-#include "utils/utils.hpp"
+#include "utils.hpp"
 
-using namespace rcli;
-
-Command::Command(std::string name, std::string description, Callback callback)
+namespace rcli
 {
-	_name = name;
-	_description = description;
-	_callback = callback;
-	add_option("-h,--help", "Show this help", "help");
-}
-
-std::string Command::get_name()
-{
-	return _name;
-}
-
-std::string Command::get_description()
-{
-	return _description;
-}
-
-bool Command::call_if_matched(std::string text)
-{
-	if (is_matched(text))
+	command::command(std::string name, std::string description, callback callback)
+		: m_name(std::move(name)),
+		  m_description(std::move(description)),
+		  m_callback(std::move(callback))
 	{
-		_callback(this);
-		return true;
-	}
-	return false;
-}
-
-bool Command::is_matched(std::string text)
-{
-	return text == _name;
-}
-
-void Command::print_help()
-{
-	Utils::print_as_key_value(" Usage", _name + " <sub_command> <option option_value>");
-	Utils::print_as_key_value(" Description", _description);
-
-	TColor::write(ColorConfig::key, "\n Options:\n");
-	for (const auto option : _options)
-	{
-		Utils::print_as_key_value("\t" + option->get_base_names(), option->get_description());
+		this->add_option("-h,--help", "Show this help", "help");
 	}
 
-	if (!_subcommands.empty())
+	auto command::get_name() const -> const std::string &
 	{
-		TColor::write(ColorConfig::key, "\n Commands:\n");
-		for (const auto command : _subcommands)
+		return this->m_name;
+	}
+
+	auto command::get_description() const -> const std::string &
+	{
+		return this->m_description;
+	}
+
+	auto command::call_if_match(const std::string &text) -> bool
+	{
+		if (this->match(text))
 		{
-			Utils::print_as_key_value("\t" + command->get_name(), command->get_description());
+			this->m_callback(this);
+			return true;
+		}
+		return false;
+	}
+
+	auto command::match(const std::string &text) -> bool
+	{
+		return this->m_name == text;
+	}
+
+	auto command::print_help() -> void
+	{
+		utils::print_as_key_value(" Usage", this->m_name + " <sub_command> <option option_value>");
+		utils::print_as_key_value(" Description", this->m_description);
+
+		std::cout << color::b_white << "\n Options:\n" << color::reset;
+		for (const auto &option : this->m_options)
+		{
+			utils::print_as_key_value("\t" + option->get_base_name(), option->get_description());
+		}
+
+		if (!this->m_subcommands.empty())
+		{
+			std::cout << color::b_white << "\n Commands:\n" << color::reset;
+			for (const auto &command : this->m_subcommands)
+			{
+				utils::print_as_key_value("\t" + command->get_name(), command->get_description());
+			}
 		}
 	}
-}
 
-void rcli::Command::add_option(std::string options, std::string description, std::string key_name)
-{
-	_options.push_back(std::make_shared<rcli::Option>(options, description, key_name));
-}
-
-void rcli::Command::add_option(Option *new_option)
-{
-	_options.push_back(std::make_shared<Option>(*new_option));
-}
-
-void rcli::Command::add_subcommand(Command *new_command)
-{
-	_subcommands.push_back(std::make_shared<Command>(*new_command));
-}
-
-std::string Command::get_option_value(std::string key)
-{
-	if (_options_values.find(key) == _options_values.end())
+	auto command::add_option(std::string options, std::string description, std::string key_name)
+		-> void
 	{
-		return "";
-	}
-	return _options_values.at(key);
-}
-
-void Command::add_informations(std::map<std::string, std::string> informations)
-{
-	for (const auto &info : informations)
-		_informations.insert(info);
-}
-
-void rcli::Command::parse(int argc, const char *argv[], int start)
-{
-	if (start >= argc)
-	{
-		_callback(this);
-		return;
+		this->m_options.push_back(std::make_shared<option>(
+			std::move(options), std::move(description), std::move(key_name)));
 	}
 
-	std::string current_action = argv[start];
-	if (current_action == "-h" || current_action == "--help")
+	auto command::add_option(option *new_option) -> void
 	{
-		print_help();
-		return;
+		this->m_options.push_back(std::make_shared<option>(*new_option));
 	}
 
-	if (current_action.find("-") == 0)
+	auto command::add_subcommand(command *new_command) -> void
 	{
-		if (start + 1 >= argc)
+		this->m_subcommands.push_back(std::make_shared<command>(*new_command));
+	}
+
+	auto command::get_option_value(const std::string &key) -> std::string
+	{
+		if (this->m_options_values.find(key) == this->m_options_values.end())
+		{
+			return "";
+		}
+		return this->m_options_values.at(key);
+	}
+
+	void command::add_informations(std::map<std::string, std::string> informations)
+	{
+		const auto moved = std::move(informations);
+		for (const auto &info : moved)
+		{
+			this->m_informations.insert(info);
+		}
+	}
+
+	void command::parse(int argc,
+		const char *argv[],	 // NOLINT(modernize-avoid-c-arrays),
+		int start)
+	{
+		if (start >= argc)
+		{
+			this->m_callback(this);
+			return;
+		}
+
+		std::string current_action = argv[start];
+		if (current_action == "-h" || current_action == "--help")
 		{
 			print_help();
 			return;
 		}
 
-		for (const auto option : _options)
+		if (current_action.find(std::string("-")) == 0)
 		{
-			std::string key_name = option->get_key_if_matched(current_action);
-			if (key_name.empty())
+			if (start + 1 >= argc)
 			{
-				continue;
-			}
-			else
-			{
-				_options_values.insert(std::make_pair(key_name, argv[start + 1]));
+				print_help();
+				return;
 			}
 
+			for (const auto &option : this->m_options)
+			{
+				std::string key_name = option->get_key_if_matched(current_action);
+				if (key_name.empty())
+				{
+					continue;
+				}
+				else
+				{
+					this->m_options_values.insert(std::make_pair(key_name, argv[start + 1]));
+				}
+
+				parse(argc, argv, start + 2);
+				return;
+			}
+			current_action.erase(0, 1);
+			this->m_options_values.insert(std::make_pair(current_action, argv[start + 1]));
 			parse(argc, argv, start + 2);
 			return;
 		}
-		current_action.erase(0, 1);
-		_options_values.insert(std::make_pair(current_action, argv[start + 1]));
-		parse(argc, argv, start + 2);
+
+		for (const auto &command : this->m_subcommands)
+		{
+			if (command->match(current_action))
+			{
+				command->parse(argc, argv, start + 1);
+				return;
+			}
+		}
+
+		print_help();
 		return;
 	}
-
-	for (const auto command : _subcommands)
-	{
-		if (command->is_matched(current_action))
-		{
-			command->parse(argc, argv, start + 1);
-			return;
-		}
-	}
-
-	print_help();
-	return;
-}
+}  // namespace rcli
