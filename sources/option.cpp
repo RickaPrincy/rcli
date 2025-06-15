@@ -1,32 +1,33 @@
 #include <rcli/option.hpp>
 
-#include "utils/utils.hpp"
+#include "utils.hpp"
 
-using namespace rcli;
-
-Option::Option(std::string options, std::string description, std::string key_name)
+namespace rcli
 {
-	_description = description;
-	_key_name = key_name;
-	_base_names = options;
-	_options = Utils::split(Utils::clean_text(options), ",");
-}
-
-std::string Option::get_key_if_matched(std::string value)
-{
-	if (Utils::some(value, _options))
+	option::option(std::string options, std::string description, std::string key_name)	// NOLINT
+		: m_description(std::move(description)),
+		  m_key_name(std::move(key_name))
 	{
-		return _key_name;
+		this->m_base_names = options;
+		this->m_options = utils::split(options, ",");
 	}
-	return "";
-}
 
-std::string Option::get_description()
-{
-	return _description;
-}
+	auto option::get_key_if_matched(const std::string &value) const -> std::string
+	{
+		if (utils::some(value, this->m_options))
+		{
+			return this->m_key_name;
+		}
+		return "";
+	}
 
-std::string Option::get_base_names()
-{
-	return _base_names;
-}
+	auto option::get_description() const -> const std::string &
+	{
+		return this->m_description;
+	}
+
+	auto option::get_base_name() const -> const std::string &
+	{
+		return this->m_base_names;
+	}
+}  // namespace rcli

@@ -1,17 +1,4 @@
-project(
-  ${RCLI_LIB_NAME}
-  VERSION ${RCLI_LIB_VERSION}
-  LANGUAGES CXX)
-
-set(LIB_SOURCES
-    app.cpp
-    color_config.cpp
-    command.cpp
-    inputs.cpp
-    option.cpp
-    utils/input.cpp
-    utils/print.cpp
-    utils/string.cpp)
+set(LIB_SOURCES app.cpp command.cpp option.cpp utils.cpp)
 
 # Create the library
 if(BUILD_SHARED_LIBS)
@@ -23,8 +10,6 @@ endif()
 # Set include directories for the library
 target_include_directories(
   ${RCLI_LIB_NAME} PRIVATE $<BUILD_INTERFACE:${RCLI_SOURCE_DIR}/include>)
-
-# target_link target_link_libraries(${RCLI_LIB_NAME} PUBLIC rcli)
 
 # set properties
 set_target_properties(

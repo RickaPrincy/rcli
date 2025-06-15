@@ -5,17 +5,17 @@
 
 namespace rcli
 {
-	class Option
+	class option
 	{
 	protected:
-		std::vector<std::string> _options;
-		std::string _description, _key_name;
-		std::string _base_names;
+		std::vector<std::string> m_options{};
+		std::string m_base_names{}, m_description{}, m_key_name{};
 
 	public:
-		std::string get_description();
-		std::string get_base_names();
-		std::string get_key_if_matched(std::string value);
-		Option(std::string options, std::string description, std::string key_name);
+		[[nodiscard]] auto get_description() const -> const std::string &;
+		[[nodiscard]] auto get_base_name() const -> const std::string &;
+		[[nodiscard]] auto get_key_if_matched(const std::string &value) const -> std::string;
+
+		option(std::string options, std::string description, std::string key_name);
 	};
 }  // namespace rcli
