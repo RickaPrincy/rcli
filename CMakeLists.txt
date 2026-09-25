@@ -1,116 +1,102 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(rcli_tools VERSION 0.0.1)
+# single source of truth for the version: include/rcli/version.hpp
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/include/rcli/version.hpp" RCLI_VERSION_HEADER)
+foreach(part MAJOR MINOR PATCH)
+  string(REGEX MATCH "#define RCLI_VERSION_${part} ([0-9]+)" _ "${RCLI_VERSION_HEADER}")
+  set(RCLI_VERSION_${part} ${CMAKE_MATCH_1})
+endforeach()
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+project(
+  rcli
+  VERSION ${RCLI_VERSION_MAJOR}.${RCLI_VERSION_MINOR}.${RCLI_VERSION_PATCH}
+  DESCRIPTION "Header-only library to build command line applications in C++17"
+  HOMEPAGE_URL "https://github.com/RickaPrincy/rcli"
+  LANGUAGES CXX)
 
-set(RCLI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(RCLI_IS_MAIN_PROJECT OFF)
-
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
   set(RCLI_IS_MAIN_PROJECT ON)
+  set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
-# target names
-set(RCLI_LIB_NAME rcli)
-set(RCLI_LIB_VERSION 2.0.23)
-set(RCLI_LIB_VERSION_MAJOR 2)
-set(RCLI_VERSION ${RCLI_LIB_VERSION})
-set(RCLI_VERSION_MAJOR ${RCLI_LIB_VERSION_MAJOR})
+option(RCLI_BUILD_TESTS "Build the rcli tests" ${RCLI_IS_MAIN_PROJECT})
+option(RCLI_BUILD_EXAMPLES "Build the rcli examples" ${RCLI_IS_MAIN_PROJECT})
+option(RCLI_INSTALL "Generate the rcli install target" ${RCLI_IS_MAIN_PROJECT})
 
-# list of options
-option(BUILD_SHARED_LIBS "Build rcli as a shared library" OFF)
-option(RCLI_LIB_INSTALL "Install rcli lib" ${RCLI_IS_MAIN_PROJECT})
-option(RCLI_BUILD_EXAMPLES "Build the examples in the project" ${RCLI_IS_MAIN_PROJECT})
+include(GNUInstallDirs)
 
-# configure build type
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Debug")
+# the library itself: headers only. Link with rcli::rcli (or rcli, kept for compatibility)
+add_library(rcli INTERFACE)
+add_library(rcli::rcli ALIAS rcli)
+target_compile_features(rcli INTERFACE cxx_std_17)
+target_include_directories(
+  rcli INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                 $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+
+if(RCLI_INSTALL)
+  include(CMakePackageConfigHelpers)
+  set(RCLI_CMAKE_DIR ${CMAKE_INSTALL_DATADIR}/cmake/rcli)
+
+  install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/rcli
+          DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(TARGETS rcli EXPORT rcliTargets)
+  install(
+    EXPORT rcliTargets
+    NAMESPACE rcli::
+    DESTINATION ${RCLI_CMAKE_DIR})
+
+  configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/rcliConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/rcliConfig.cmake
+    INSTALL_DESTINATION ${RCLI_CMAKE_DIR})
+  write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/rcliConfigVersion.cmake
+    COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/rcliConfig.cmake
+                ${CMAKE_CURRENT_BINARY_DIR}/rcliConfigVersion.cmake
+          DESTINATION ${RCLI_CMAKE_DIR})
 endif()
 
-# Build example if build types is not release and rcli is a main project
-if(RCLI_IS_MAIN_PROJECT AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-  set(RCLI_BUILD_EXAMPLES ON)
+if(RCLI_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
 endif()
-
-if(WIN32)
-  add_compile_options(WIN32)
-endif()
-
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-  set(RCLI_TEST OFF)
-endif()
-
-if(RCLI_IS_MAIN_PROJECT)
-  configure_file(${RCLI_SOURCE_DIR}/.templates/PKGBUILD.in
-                 ${RCLI_SOURCE_DIR}/PKGBUILD @ONLY)
-
-  configure_file(${RCLI_SOURCE_DIR}/.templates/install.sh.in
-                 ${RCLI_SOURCE_DIR}/install.sh @ONLY)
-
-  configure_file(${RCLI_SOURCE_DIR}/.templates/create-release.sh.in
-                 ${RCLI_SOURCE_DIR}/create-release.sh @ONLY)
-
-  configure_file(
-    ${RCLI_SOURCE_DIR}/.templates/${RCLI_LIB_NAME}_config.hpp.in
-    ${RCLI_SOURCE_DIR}/include/${RCLI_LIB_NAME}/${RCLI_LIB_NAME}_config.hpp
-    @ONLY)
-endif()
-
-if(NOT CMAKE_BUILD_SHARED_LIBS)
-  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
-endif()
-
-add_subdirectory(sources)
 
 if(RCLI_BUILD_EXAMPLES)
   add_subdirectory(example)
 endif()
 
-# CPack configuration
-set(CPACK_PACKAGE_VENDOR "RickaPrincy <rckprincy@gmail.com>")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Library to parse user command-line input")
-include(CPack)
-
-# clang-format
-find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
-if(CLANG_FORMAT_EXECUTABLE)
-  file(GLOB_RECURSE ALL_SOURCE_FILES
-     "${RCLI_SOURCE_DIR}/example/*.cpp"
-     "${RCLI_SOURCE_DIR}/sources/*.cpp"
-     "${RCLI_SOURCE_DIR}/sources/*.hpp"
-     "${RCLI_SOURCE_DIR}/include/rcli/*.hpp")
-
-  add_custom_target(format
-    COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${ALL_SOURCE_FILES}
-    COMMENT "Running clang-format to format code"
-  )
-
-  add_custom_target(format-check
-    COMMAND ${CLANG_FORMAT_EXECUTABLE} --dry-run --Werror -style=file ${ALL_SOURCE_FILES}
-    COMMENT "Checking code format (clang-format) - will fail if formatting issues"
-  )
-else()
-  message(WARNING "clang-format not found. Format targets will NOT be available.")
-endif()
-
-# clang-tidy
-find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy)
-if(CLANG_TIDY_EXECUTABLE)
-  if(NOT ALL_SOURCE_FILES)
-    file(GLOB_RECURSE ALL_SOURCE_FILES
-       "${RCLI_SOURCE_DIR}/example/*.cpp"
-       "${RCLI_SOURCE_DIR}/sources/*.cpp"
-       "${RCLI_SOURCE_DIR}/sources/*.hpp"
-       "${RCLI_SOURCE_DIR}/include/rcli/*.hpp")
+if(RCLI_IS_MAIN_PROJECT)
+  # regenerate single_include/rcli/rcli.hpp from include/
+  find_package(Python3 COMPONENTS Interpreter QUIET)
+  if(Python3_FOUND)
+    add_custom_target(amalgamate
+      COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tools/amalgamate.py
+      COMMENT "Generating the single header")
   endif()
-  
-  add_custom_target(lint
-    COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_CURRENT_BINARY_DIR} ${ALL_SOURCE_FILES}
-    COMMENT "Running clang-tidy"
-  )
-else()
-  message(WARNING "clang-tidy not found. clang-tidy target will NOT be available.")
+
+  file(GLOB_RECURSE RCLI_ALL_SOURCES CONFIGURE_DEPENDS
+       "${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp"
+       "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cpp"
+       "${CMAKE_CURRENT_SOURCE_DIR}/tests/*.hpp"
+       "${CMAKE_CURRENT_SOURCE_DIR}/example/*.cpp")
+
+  find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
+  if(CLANG_FORMAT_EXECUTABLE)
+    add_custom_target(format
+      COMMAND ${CLANG_FORMAT_EXECUTABLE} -i -style=file ${RCLI_ALL_SOURCES}
+      COMMENT "Formatting sources with clang-format")
+    add_custom_target(format-check
+      COMMAND ${CLANG_FORMAT_EXECUTABLE} --dry-run --Werror -style=file ${RCLI_ALL_SOURCES}
+      COMMENT "Checking sources format with clang-format")
+  endif()
+
+  find_program(CLANG_TIDY_EXECUTABLE NAMES clang-tidy)
+  if(CLANG_TIDY_EXECUTABLE)
+    file(GLOB RCLI_TIDY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/example/*.cpp")
+    add_custom_target(lint
+      COMMAND ${CLANG_TIDY_EXECUTABLE} -p ${CMAKE_BINARY_DIR} ${RCLI_TIDY_SOURCES}
+      COMMENT "Running clang-tidy")
+  endif()
 endif()

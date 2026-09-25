@@ -17,3 +17,6 @@ example/build
 *cmake-tools*
 out
 release
+
+.idea/
+dist/

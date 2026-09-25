@@ -1,0 +1,62 @@
+name: release
+
+# Publishes a GitHub release for the version declared in include/rcli/version.hpp
+# (the version CMake uses), with every file built by tools/package_release.sh attached.
+#
+# Two ways to release:
+#   - Actions tab > release > "Run workflow": creates the tag v<version> itself
+#   - or push the tag yourself: git tag v2.1.0 && git push origin v2.1.0
+#
+# The single header is then downloadable at:
+# https://github.com/RickaPrincy/rcli/releases/latest/download/rcli.hpp
+on:
+  push:
+    tags: [ "v*" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: read the version
+      id: version
+      run: |
+        version=$(sed -n 's/^#define RCLI_VERSION_\(MAJOR\|MINOR\|PATCH\) \([0-9]*\)$/\2/p' include/rcli/version.hpp | paste -sd.)
+        echo "tag=v$version" >> "$GITHUB_OUTPUT"
+        echo "version.hpp declares v$version"
+
+    - name: check the tag
+      env:
+        TAG: ${{ steps.version.outputs.tag }}
+      run: |
+        if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+          test "$GITHUB_REF_NAME" = "$TAG" || { echo "::error::tag $GITHUB_REF_NAME does not match version.hpp ($TAG)"; exit 1; }
+        elif git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null; then
+          echo "::error::$TAG already exists: bump the version in include/rcli/version.hpp first"
+          exit 1
+        fi
+
+    - name: run the tests
+      run: |
+        cmake -S . -B build
+        cmake --build build
+        ctest --test-dir build --output-on-failure
+
+    - name: build the release files
+      run: tools/package_release.sh
+
+    - name: publish the release
+      env:
+        GH_TOKEN: ${{ github.token }}
+        TAG: ${{ steps.version.outputs.tag }}
+      run: |
+        if gh release view "$TAG" >/dev/null 2>&1; then
+          gh release upload "$TAG" dist/* --clobber
+        else
+          gh release create "$TAG" dist/* --title "rcli $TAG" --target "$GITHUB_SHA" --generate-notes
+        fi

@@ -1,2 +1,12 @@
-# your_config here
-# ex: find_package(rcli)
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/rcliTargets.cmake")
+
+# rcli <= 2.0 was linked as `rcli`: keep that name working next to rcli::rcli
+if(NOT TARGET rcli)
+  add_library(rcli INTERFACE IMPORTED)
+  set_target_properties(rcli PROPERTIES INTERFACE_LINK_LIBRARIES rcli::rcli)
+endif()
+
+# No check_required_components(): rcli has no components, and projects written for
+# rcli <= 2.0 used `find_package(rcli REQUIRED VERSION x)`, which CMake reads as components.

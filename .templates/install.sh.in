@@ -1,9 +1,0 @@
-#! /bin/bash
-git clone -b v@RCLI_LIB_VERSION@ https://github.com/RickaPrincy/rcli.git 
-cd @RCLI_LIB_NAME@ 
-mkdir build
-cd build
-cmake -DCMAKE_BUILD_TYPE=Release -S .. -B .
-sudo make install
-cd ../..
-rm -rf rcli 

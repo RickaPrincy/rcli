@@ -2,7 +2,7 @@ Checks: >
   clang-analyzer-*,
   modernize-*,
   performance-*,
-  -readability-avoid-endl
+  -readability-avoid-endl,
   -readability-identifier-naming
 
 WarningsAsErrors: '*'

@@ -1,4 +1,4 @@
-name: ci 
+name: ci
 
 on:
   push:
@@ -7,30 +7,72 @@ on:
     branches: [ "main" ]
 
 jobs:
-  style:
-    runs-on: ubuntu-latest
-    name: check-style 
+  test:
+    name: ${{ matrix.os }} / ${{ matrix.compiler }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, compiler: gcc, cxx: g++ }
+          - { os: ubuntu-latest, compiler: clang, cxx: clang++ }
+          - { os: macos-latest, compiler: clang, cxx: clang++ }
+          - { os: windows-latest, compiler: msvc }
     steps:
     - uses: actions/checkout@v4
 
-    - name: configure 
-      run: cmake -S . -B build
-  
-    # FIXME
-    # - name: format-check
-    #   run: cmake --build build --target format-check
+    - name: configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug ${{ matrix.cxx && format('-DCMAKE_CXX_COMPILER={0}', matrix.cxx) || '' }}
 
-    # - name: lint
-    #   run: cmake --build build --target lint
+    - name: build
+      run: cmake --build build --config Debug
 
-  build:
+    - name: test
+      run: ctest --test-dir build -C Debug --output-on-failure
+
+  single-header:
+    name: single header is up to date and usable alone
     runs-on: ubuntu-latest
-    name: build with cmake
     steps:
     - uses: actions/checkout@v4
-    
-    - name: configure 
-      run: cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
 
-    - name: build 
-      run: cd build; make
+    - name: check that single_include/ matches include/
+      run: python3 tools/amalgamate.py --check
+
+    - name: compile the example with nothing but the single header
+      run: |
+        mkdir -p "$RUNNER_TEMP/user"
+        cp single_include/rcli/rcli.hpp "$RUNNER_TEMP/user/"
+        sed 's|#include <rcli/rcli.hpp>|#include "rcli.hpp"|' example/main.cpp > "$RUNNER_TEMP/user/main.cpp"
+        cd "$RUNNER_TEMP/user"
+        g++ -std=c++17 -Wall -Wextra -Werror main.cpp -o app
+        ./app --version
+        ./app init -f a.txt | grep 'file value: a.txt'
+
+  install:
+    name: install and consume with find_package
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: install
+      run: |
+        cmake -S . -B build -DRCLI_BUILD_TESTS=OFF -DRCLI_BUILD_EXAMPLES=OFF
+        cmake --install build --prefix "$RUNNER_TEMP/prefix"
+
+    - name: consume
+      run: |
+        mkdir -p "$RUNNER_TEMP/consumer"
+        cd "$RUNNER_TEMP/consumer"
+        printf '%s\n' \
+          'cmake_minimum_required(VERSION 3.18)' \
+          'project(consumer CXX)' \
+          'find_package(rcli REQUIRED)' \
+          'add_executable(consumer main.cpp)' \
+          'target_link_libraries(consumer PRIVATE rcli::rcli rcli)' > CMakeLists.txt
+        printf '%s\n' \
+          '#include <rcli/rcli.hpp>' \
+          'int main(int argc, char *argv[]) { rcli::app a("consumer", "test", "1.0"); return a.run(argc, argv); }' > main.cpp
+        cmake -S . -B build -DCMAKE_PREFIX_PATH="$RUNNER_TEMP/prefix"
+        cmake --build build
+        ./build/consumer --version | grep 'Version: 1.0'
